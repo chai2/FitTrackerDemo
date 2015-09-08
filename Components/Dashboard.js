@@ -1,7 +1,8 @@
 var React = require('react-native');
 var Account = require('./account');
 var Friends = require('./friends');
-
+var Dimensions = require('Dimensions');
+var windowSize = Dimensions.get('window');
 var Parse = require('parse').Parse;
 var ParseReact = require('parse-react');
 
@@ -25,6 +26,13 @@ var styles = StyleSheet.create({
   },
   image: {
     height: 350,
+  },
+  bg: {
+    position: 'absolute',
+    left: 0,
+    top: 0,
+    width: windowSize.width,
+    height: windowSize.height
   },
   buttonText: {
     fontSize: 24,
@@ -83,10 +91,10 @@ class Dashboard extends React.Component{
                   selectedTab: 'dashboard'
               });
           }}>
-            <View style={styles.container}>
-              <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
-              <Text> Welcome to dashboard </Text>
-            </View>
+          <View style={styles.container}>
+            <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
+            <Text> Welcome to dashboard </Text>
+          </View>
         </TabBarIOS.Item>
         <TabBarIOS.Item
           name="friends"
@@ -116,7 +124,6 @@ class Dashboard extends React.Component{
           <Account/>
         </TabBarIOS.Item>
       </TabBarIOS>
-
     );
   }
 };
