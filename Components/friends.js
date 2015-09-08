@@ -4,9 +4,10 @@ var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Parse = require('parse').Parse;
 var Account = require('./account');
+var Leaderboard = require('./leaderboard');
 var Dashboard = require('./Dashboard');
 var config = require('../config');
-
+var shittyQs = require('shitty-qs');
 var {
   AppRegistry,
   StyleSheet,
@@ -14,6 +15,7 @@ var {
   View,
   TouchableHighlight,
   LinkingIOS,
+  NavigatorIOS,
   Image
 } = React
 
@@ -36,31 +38,47 @@ function fitbitOauth (app_key, callback) {
   LinkingIOS.openURL([
     'https://www.fitbit.com/oauth2/authorize',
     '?response_type=token',
-    '&client_id=' + '229VHT',
-    '&redirect_uri=fitapp://authorizedoyou',
+    '&client_id=' + '229VM9',
+    '&redirect_uri=oauth2example://foo',
     `&state=${state}`,
     '&scope=profile+social',
     '&expires_in=2592000'
   ].join(''))
 }
+var userInfo;
 
 var Friends = React.createClass({
   componentDidMount: function () {
-    fitbitOauth(config.app_key, (err, access_token) => {
+    fitbitOauth(config.fitbit_app_key, (err, access_token) => {
       if (err) { console.log(err) }
       this.setState({ access_token: access_token })
     })
-    console.log("bom");
   },
 
   getUserInfo: function(res) {
-    var userInfo = res;
     // userInfo.name = res.displayName;
+
+    userInfo = res;
+
     console.log(userInfo);
+
+    console.log("nav");
+
+    this.props.navigate.push({
+      title: 'Leaderboard',
+      component: Leaderboard,
+      passProps: {userInfo: userInfo}
+    })
+
   },
 
   onMakeFolderPressed: function () {
-    // console.log(this.state && this.state.access_token);
+
+  var currentUser = Parse.User.current();
+
+  console.log("Current user:", currentUser);
+
+    console.log(this.state && this.state.access_token);
     fetch(
       'https://api.fitbit.com/1/user/-/profile.json',
       {
@@ -72,9 +90,10 @@ var Friends = React.createClass({
     ).then((res) => this.getUserInfo(res))
   },
   render: function() {
+
+    console.log("Friends Navigate:", this.props.navigate);
+
     return (
-
-
       <View style={styles.container}>
       <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
         <TouchableHighlight

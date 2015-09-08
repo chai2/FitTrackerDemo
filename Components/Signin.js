@@ -142,7 +142,8 @@ class Signin extends React.Component{
 
     this.props.navigate.push({
       title: 'Dashboard',
-      component: Dashboard
+      component: Dashboard,
+      passProps: {navigate: this.props.navigate}      
     });
     this.setState({
       isLoading: false,

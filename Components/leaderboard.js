@@ -37,21 +37,25 @@ var styles = StyleSheet.create({
     justifyContent: 'center',
     alignItems: 'center',
     flex: .15
+  },
+  welcome: {
+    fontSize: 20,
+    textAlign: 'center',
+    margin: 10,
+  },
+  instructions: {
+    textAlign: 'center',
+    color: '#333333',
+    marginBottom: 5,
   }
 });
 
-class Account extends React.Component{
+class Leaderboard extends React.Component{
 
-  // handleLogout(){
-  //   Parse.User.logOut();
-  //   var currentUser = Parse.User.current();
-  //   console.log("logged out");
-  //   this.props.navigate.push({
-  //     title: 'Sign In',
-  //     component: Signin
-  //   });
-  //
-  // }
+  constructor(props){
+    super(props)
+    console.log("In leaderboard in constr" + this.props.navigate);
+  }
 
   render(){
     // var currentUser = Parse.User.current();
@@ -61,10 +65,10 @@ class Account extends React.Component{
     return (
       <View style={styles.container}>
       <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
-        <Text>My Account</Text>
+        <Text>My Something</Text>
       </View>
     );
   }
 };
 
-module.exports = Account;
+module.exports = Leaderboard;

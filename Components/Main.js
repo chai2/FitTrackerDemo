@@ -112,7 +112,7 @@ class Main extends React.Component{
   if(currentUser){
     console.log("In Main here");
     console.log(Parse.User.current());
-    requiredScreen = <Dashboard />;
+    requiredScreen = <Dashboard navigate={this.props.navigator}/>;
   } else {
     console.log("Without Main here");
     requiredScreen = <Signin navigate={this.props.navigator} />;

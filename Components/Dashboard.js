@@ -73,6 +73,9 @@ class Dashboard extends React.Component{
     return obj;
   }
   render(){
+
+    console.log("Dashboard Navigate:", this.props.navigate);
+
     return (
 
       <TabBarIOS
@@ -107,7 +110,7 @@ class Dashboard extends React.Component{
                     selectedTab: 'friend',
                 });
           }}>
-          <Friends/>
+          <Friends navigate={this.props.navigate}/>
         </TabBarIOS.Item>
         <TabBarIOS.Item
           name="account"
@@ -121,7 +124,7 @@ class Dashboard extends React.Component{
                     selectedTab: 'account',
                 });
           }}>
-          <Account/>
+          <Account navigate={this.props.navigate}/>
         </TabBarIOS.Item>
       </TabBarIOS>
     );
