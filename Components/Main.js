@@ -17,40 +17,7 @@ var {
 var styles = StyleSheet.create({
   mainContainer: {
     flex: 1
-  },
-  title: {
-    marginBottom: 20,
-    fontSize: 25,
-    textAlign: 'center',
-    color: '#fff'
-  },
-  searchInput: {
-    height: 50,
-    padding: 4,
-    marginRight: 5,
-    fontSize: 23,
-    borderWidth: 1,
-    borderColor: 'white',
-    borderRadius: 8,
-    color: 'white'
-  },
-  buttonText: {
-    fontSize: 18,
-    color: '#111',
-    alignSelf: 'center'
-  },
-  button: {
-    height: 45,
-    flexDirection: 'row',
-    backgroundColor: 'white',
-    borderColor: 'white',
-    borderWidth: 1,
-    borderRadius: 8,
-    marginBottom: 10,
-    marginTop: 10,
-    alignSelf: 'stretch',
-    justifyContent: 'center'
-  },
+  }
 });
 
 class Main extends React.Component{
@@ -121,7 +88,6 @@ class Main extends React.Component{
   return(
     <View style={styles.mainContainer}>
       {requiredScreen}
-          <Text> Cool ya? </Text>
     </View>
   );
   }
