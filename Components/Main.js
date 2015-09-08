@@ -28,7 +28,6 @@ class Main extends React.Component{
       isLoading: false,
       error: false
     }
-    console.log("In Main in constr" + this.props.navigator);
   }
   handleChange(e){
     this.setState({
@@ -71,6 +70,8 @@ class Main extends React.Component{
   render() {
 
   var requiredScreen;
+
+  Parse.User.logOut();
 
   var currentUser = Parse.User.current();
 

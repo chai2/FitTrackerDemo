@@ -41,49 +41,104 @@ class Signup extends React.Component{
       email: e.nativeEvent.text
     })
   }
+  // handleResponse(res){
+  //   console.log(res);
+  //   console.log(res.includes('createdAt'));
+  //   if(res.code === 125){
+  //     this.setState({
+  //       error: "Enter Valid Email",
+  //       email: ''
+  //     })
+  //   } else if (res.code === 201){
+  //     console.log("sign success");
+  //     var Dashboard = require('../dashboard/dashboard');
+  //     this.props.navigator.push({
+  //       title: 'Dashboard',
+  //       component: Dashboard,
+  //       passProps: {userInfo: res}
+  //     })
+  //   } else {
+  //     console.log("Error creating a new user");
+  //   }
+  // }
+
+
   handleResponse(res){
-    console.log(res);
-    console.log(res.includes('createdAt'));
-    if(res.code === 125){
+
+    var dat = res;
+    var currentUser;
+
+    currentUser = Parse.User.logIn(this.state.username, this.state.password, {
+      success: function(user) {
+        console.log("I'm authing you");
+        // Do stuff after successful login.
+        currentUser = Parse.User.current();
+      },
+      error: function(user, error) {
+        console.log("I'm erroring you");
+        // The login failed. Check error to see why.
+      }
+    })
+
+    var Dashboard = require('./Dashboard');
+
+    console.log("Current User:", currentUser);
+
+    console.log("Are you true?: ", currentUser._isCurrentUser);
+
+    // console.log('in handleResponse of sign in'+ this.state.isUser + "data", dat.code);
+
+    if(!currentUser._isCurrentUser){
+      console.log("sgkhfdg");
       this.setState({
-        error: "Enter Valid Email",
-        email: ''
+        error: 'User not found',
+        isLoading: false
       })
-    } else if (res.code === 201){
-      console.log("sign success");
-      var Dashboard = require('../dashboard/dashboard');
-      this.props.navigator.push({
+
+    } else {
+      console.log("False Positive");
+      console.log("In Here: ", currentUser);
+
+      console.log("Navigate:"+this.props.navigate);
+
+      this.props.navigate.push({
         title: 'Dashboard',
         component: Dashboard,
-        passProps: {userInfo: res}
-      })
-    } else {
-      console.log("Error creating a new user");
+        passProps: {navigate: this.props.navigate}
+      });
+      this.setState({
+        isLoading: false,
+        error: false,
+        username: ''
+      });
+      }
     }
-  }
 
-  signUp(e){
+  handleSubmit(e){
 
-    var username = this.state.username;
-    var password = this.state.password;
-    var email    = this.state.email;
+    var user = new Parse.User();
 
-    api.newSignup(username, password, email)
-      .then((jsonRes) => this.handleResponse(jsonRes))
+    user.set("username", this.state.username);
+    user.set("password", this.state.password);
+    user.set("email", this.state.email);
+
+    return(
+      user.signUp(null, {
+          success: function(user) {
+        },
+          error: function(user, error) {
+            console.log("Error: " + error.code + " " + error.message);
+          }
+      })
+    ).then((jsonRes) => this.handleResponse(jsonRes));
   }
 
   navigatetoLogin(e){
-    console.log("navigating to login");
-    this.props.navigator.push({
-      title: 'Login',
-      component: Login
-    })
+    console.log("navigating back");
+    this.props.navigate.pop();
   }
 
   render() {
-    var showErr = (
-      this.state.error ? <Text style={styles.error}> {this.state.error} </Text> : <View></View>
-    );
     return (
         <View style={styles.container}>
           <Text> What </Text>
@@ -115,7 +170,6 @@ class Signup extends React.Component{
                 </View>
                 <View style={styles.inputContainer}>
                     <Image style={styles.inputEmail} source={{uri: 'http://technology.gsu.edu/files/2013/04/email_icon_80x80.png'}}/>
-                    {showErr}
 
                     <TextInput
                         style={[styles.input, styles.whiteFont]}
@@ -125,13 +179,10 @@ class Signup extends React.Component{
                         value={this.state.email}
                     />
                 </View>
-                <View style={styles.forgotContainer}>
-                    <Text style={styles.greyFont}>Forgot Password</Text>
-                </View>
             </View>
             <TouchableHighlight
               style={styles.signin}
-              onPress={this.signUp.bind(this)}
+              onPress={this.handleSubmit.bind(this)}
               underlayColor = "white">
                 <Text style={styles.whiteFont}>Sign Up</Text>
             </TouchableHighlight>
@@ -140,7 +191,7 @@ class Signup extends React.Component{
               style={styles.signup}
               onPress={this.navigatetoLogin.bind(this)}>
                 <Text style={styles.greyFont}>
-                  Already a user?<Text style={styles.whiteFont}>Login</Text>
+                  Already a user?<Text style={styles.whiteFont}> Sign In </Text>
                 </Text>
             </TouchableHighlight>
         </View>

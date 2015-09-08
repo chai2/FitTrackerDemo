@@ -121,27 +121,11 @@ class Signin extends React.Component{
     })
   }
 
-  makeBackground(btn){
-    var obj = {
-      flexDirection: 'row',
-      alignSelf: 'stretch',
-      justifyContent: 'center',
-      flex: 1
-    }
-    if(btn === 0){
-      obj.backgroundColor = '#48BBEC';
-    } else if (btn === 1){
-      obj.backgroundColor = '#E77AAE';
-    } else {
-      obj.backgroundColor = '#758BF4';
-    }
-    return obj;
-  }
   navigatetoSignup(e){
-    console.log("navigating to login"+this.props.navigate);
     this.props.navigate.push({
       title: 'Sign Up',
-      component: Signup
+      component: Signup,
+      passProps: {navigate: this.props.navigate }
     })
   }
 
@@ -202,54 +186,10 @@ class Signin extends React.Component{
       }
     })
   ).then((jsonRes) => this.handleResponse(jsonRes));
-
-    // console.log("Current user data:"+currentUser);
-    //
-    // if(currentUser != null){
-    //     this.handleResponse.bind(this);
-    //   console.log("I am correct login");
-    // } else {
-    //   console.log("see you dude.");
-    // }
-
-    // api.performAuth(this.state.username, this.state.password)
-    //   .then((jsonRes) => this.handleResponse(jsonRes))
-    //   .catch((err) => {
-    //     console.log("failed"+err);
-    //     this.setState({
-    //       isUser: false
-    //     })
-    //   })
-
-    // var url = `https://api.parse.com/1/login?username=`+this.state.username+`&password=`+this.state.password;
-    // return fetch(url, {
-    //   method: 'get',
-    //   headers: {
-    //   'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
-    //   'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ'
-    //   }
-    // }).then((res) => res.handleResponse());
-    // .then((jsonRes) => this.handleResponse(jsonRes))
-    //
-    // console.log("Response" + res);
-
-    // Parse.User.logIn(this.state.username, this.state.password, {
-    //   success: function(user) {
-    //     console.log("correct login");
-    //     // Do stuff after successful login.
-    //     console.log(user);
-    //     this.state.isUser = true;
-    //     return user;
-    //   },
-    //   error: function(user, error) {
-    //     console.log("falthu login");
-    //     return error;
-    //     // The login failed. Check error to see why.
-    //   }
-    // })
   }
 
   render(){
+
     return (
       <View style={styles.container}>
         <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
