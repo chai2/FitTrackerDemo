@@ -1,5 +1,7 @@
 # Fit Tracker Demo
 
+** Idea: The idea is to update the leaderboard of fitbit app to show the top rankers based on the badges they earned. **
+
 Libraries Used: 
 
 * FitBit Oauth2 with Linking IOS - https://dev.fitbit.com/docs/oauth2/
