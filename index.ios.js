@@ -6,7 +6,6 @@
 
 var React = require('react-native');
 var Main = require('./Components/Main');
-var Router = require('react-native-router');
 
 var {
   AppRegistry,

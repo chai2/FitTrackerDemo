@@ -3,11 +3,6 @@ var Account = require('./account');
 var Friends = require('./friends');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
-var Parse = require('parse').Parse;
-var ParseReact = require('parse-react');
-
-Parse.initialize('Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De','56ejFKXCGa01h0eYnaPXteYmbfJKDzNPHowdQbgW');
-
 
 var {
   Text,
@@ -85,6 +80,7 @@ class Dashboard extends React.Component{
           name="home"
           title={'dashboard'}
           selected={this.state.selectedTab === 'dashboard'}
+          icon={{uri:'featured'}}
           iconName={'ion|ios-home-outline'}
           iconSize={32}
           onPress={() => {
@@ -113,6 +109,7 @@ class Dashboard extends React.Component{
         <TabBarIOS.Item
           name="account"
           title={'account'}
+          icon={{uri:'contacts'}}
           selected={this.state.selectedTab === 'account'}
           iconName={'ion|ios-home-outline'}
 

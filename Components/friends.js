@@ -2,7 +2,6 @@
 var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
-var Parse = require('parse').Parse;
 var Account = require('./account');
 var Leaderboard = require('./leaderboard');
 var Dashboard = require('./Dashboard');
@@ -74,9 +73,6 @@ var Friends = React.createClass({
 
   onMakeFolderPressed: function () {
 
-  var currentUser = Parse.User.current();
-
-  console.log("Current user:", currentUser);
 
     console.log(this.state && this.state.access_token);
     fetch(

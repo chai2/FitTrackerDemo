@@ -2,7 +2,6 @@
 var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
-var api = require('../Utils/api');
 var Login = require('./Signin');
 
 var {
@@ -66,29 +65,13 @@ class Signup extends React.Component{
   handleResponse(res){
 
     var dat = res;
-    var currentUser;
-
-    currentUser = Parse.User.logIn(this.state.username, this.state.password, {
-      success: function(user) {
-        console.log("I'm authing you");
-        // Do stuff after successful login.
-        currentUser = Parse.User.current();
-      },
-      error: function(user, error) {
-        console.log("I'm erroring you");
-        // The login failed. Check error to see why.
-      }
-    })
 
     var Dashboard = require('./Dashboard');
 
-    console.log("Current User:", currentUser);
-
-    console.log("Are you true?: ", currentUser._isCurrentUser);
 
     // console.log('in handleResponse of sign in'+ this.state.isUser + "data", dat.code);
 
-    if(!currentUser._isCurrentUser){
+    if(false){
       console.log("sgkhfdg");
       this.setState({
         error: 'User not found',
@@ -116,7 +99,6 @@ class Signup extends React.Component{
 
   handleSubmit(e){
 
-    var user = new Parse.User();
 
     user.set("username", this.state.username);
     user.set("password", this.state.password);

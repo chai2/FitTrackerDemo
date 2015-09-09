@@ -1,6 +1,4 @@
 var React = require('react-native');
-var Parse = require('parse').Parse;
-var ParseReact = require('parse-react');
 var Dashboard = require('./Dashboard');
 var Signin = require('./Signin');
 
@@ -71,15 +69,10 @@ class Main extends React.Component{
 
   var requiredScreen;
 
-  Parse.User.logOut();
-
-  var currentUser = Parse.User.current();
-
-  console.log("I'm in Main", currentUser);
+  var currentUser;
 
   if(currentUser){
     console.log("In Main here");
-    console.log(Parse.User.current());
     requiredScreen = <Dashboard navigate={this.props.navigator}/>;
   } else {
     console.log("Without Main here");

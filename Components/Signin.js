@@ -2,15 +2,7 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Signup = require('./Signup');
-var Router = require('react-native-router');
 var api = require('../Utils/api');
-
-var Parse = require('parse').Parse;
-
-Parse.initialize(
-  'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
-  '56ejFKXCGa01h0eYnaPXteYmbfJKDzNPHowdQbgW'
-);
 
 var {
   Text,
@@ -99,7 +91,6 @@ var styles = StyleSheet.create({
 class Signin extends React.Component{
   constructor(props){
     super(props)
-    console.log("In Sign in constr" + this.props.navigate);
 
     this.state = {
       username: '',
@@ -132,60 +123,18 @@ class Signin extends React.Component{
   handleResponse(res){
 
   var dat = res;
-  var currentUser = Parse.User.current();
   var Dashboard = require('./Dashboard');
-
-  console.log("Current User:" + currentUser +"Response: " + res);
-
-  console.log("Are you true?: "+ currentUser._isCurrentUser);
-
-  // console.log('in handleResponse of sign in'+ this.state.isUser + "data", dat.code);
-
-  if(!currentUser._isCurrentUser){
-    this.setState({
-      error: 'User not found',
-      isLoading: false
-    })
-
-  } else {
-    console.log("False Positive");
-    console.log("In Here: ", currentUser);
-
-    console.log("Navigate:"+this.props.navigate);
-
     this.props.navigate.push({
       title: 'Dashboard',
       component: Dashboard,
-      passProps: {navigate: this.props.navigate}
-    });
-    this.setState({
-      isLoading: false,
-      error: false,
-      username: ''
-    });
-    }
+      passProps: {userInfo: res}
+    })
   }
 
   handleSubmit(e){
 
-    console.log("In submit"+this.state.username+"pass:"+this.state.password);
-
-    var currentUser = Parse.User.current();
-
-    return (Parse.User.logIn(this.state.username, this.state.password, {
-      success: function(user) {
-        console.log("I'm authing you");
-        // Do stuff after successful login.
-        currentUser = Parse.User.current();
-
-        return currentUser;
-      },
-      error: function(user, error) {
-        console.log("I'm erroring you");
-        // The login failed. Check error to see why.
-      }
-    })
-  ).then((jsonRes) => this.handleResponse(jsonRes));
+    api.performAuth(this.state.username, this.state.password)
+    .then((jsonRes) => this.handleResponse(jsonRes));
   }
 
   render(){
