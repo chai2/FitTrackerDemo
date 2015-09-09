@@ -40,27 +40,6 @@ class Signup extends React.Component{
       email: e.nativeEvent.text
     })
   }
-  // handleResponse(res){
-  //   console.log(res);
-  //   console.log(res.includes('createdAt'));
-  //   if(res.code === 125){
-  //     this.setState({
-  //       error: "Enter Valid Email",
-  //       email: ''
-  //     })
-  //   } else if (res.code === 201){
-  //     console.log("sign success");
-  //     var Dashboard = require('../dashboard/dashboard');
-  //     this.props.navigator.push({
-  //       title: 'Dashboard',
-  //       component: Dashboard,
-  //       passProps: {userInfo: res}
-  //     })
-  //   } else {
-  //     console.log("Error creating a new user");
-  //   }
-  // }
-
 
   handleResponse(res){
 
@@ -68,22 +47,13 @@ class Signup extends React.Component{
 
     var Dashboard = require('./Dashboard');
 
-
-    // console.log('in handleResponse of sign in'+ this.state.isUser + "data", dat.code);
-
     if(false){
-      console.log("sgkhfdg");
       this.setState({
         error: 'User not found',
         isLoading: false
       })
 
     } else {
-      console.log("False Positive");
-      console.log("In Here: ", currentUser);
-
-      console.log("Navigate:"+this.props.navigate);
-
       this.props.navigate.push({
         title: 'Dashboard',
         component: Dashboard,
@@ -116,7 +86,6 @@ class Signup extends React.Component{
   }
 
   navigatetoLogin(e){
-    console.log("navigating back");
     this.props.navigate.pop();
   }
 

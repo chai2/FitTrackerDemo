@@ -52,11 +52,9 @@ class Dashboard extends React.Component{
     };
   }
 
-
   render(){
 
     return (
-
       <TabBarIOS
         selectedTab={this.state.selectedTab}
         barTintColor='#FFF'
@@ -124,9 +122,5 @@ class Dashboard extends React.Component{
     );
   }
 };
-
-// Dashboard.propTypes = {
-//   userInfo: React.PropTypes.object.isRequired
-// }
 
 module.exports = Dashboard;

@@ -27,7 +27,7 @@
 			<string>com.fitbitdemoapp.ios</string>
 			<key>CFBundleURLSchemes</key>
 			<array>
-				<string>oauth2example</string>
+				<string>leaderboard</string>
 			</array>
 		</dict>
 	</array>

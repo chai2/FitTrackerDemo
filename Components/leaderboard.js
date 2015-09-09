@@ -49,18 +49,14 @@ class Leaderboard extends React.Component{
 
   constructor(props){
     super(props)
-
-    console.log("In leaderboard in constr", this.props.userInfo);
-    console.log("In leaderboard friends in constr", this.props.friendsInfo.friends[0].user.topBadges[0].timesAchieved);
-
+    console.log("Prop values", this.props.userInfo);
   }
 
   render(){
     return (
       <View style={styles.container}>
-      <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
       <Text style={styles.instructions}>
-        My Something {this.props.userInfo.user.displayName}
+        Hi, {this.props.userInfo.user.displayName}
       </Text>
 
       <Image style={styles.logo}

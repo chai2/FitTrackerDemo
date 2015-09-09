@@ -188,8 +188,4 @@ class Signin extends React.Component{
   }
 };
 
-// Dashboard.propTypes = {
-//   userInfo: React.PropTypes.object.isRequired
-// }
-
 module.exports = Signin;
