@@ -23,3 +23,5 @@ Fonts Used:
 * Ion Icons
 
 * Material Icons 
+
+- Used ES6 and ES5 class definitions. 
