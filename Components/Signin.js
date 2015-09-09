@@ -18,6 +18,7 @@ var styles = StyleSheet.create({
     container: {
       flexDirection: 'column',
       flex: 1,
+      marginTop: 63,
       backgroundColor: 'transparent'
     },
     bg: {
@@ -38,7 +39,7 @@ var styles = StyleSheet.create({
         height: 150
     },
     signin: {
-        backgroundColor: '#FF3366',
+        backgroundColor: '#69E3C8',
         padding: 20,
         alignItems: 'center'
     },
