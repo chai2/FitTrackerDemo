@@ -1,4 +1,4 @@
-# FitTrackerDemo
+# Fit Tracker Demo
 
 Libraries Used: 
 
