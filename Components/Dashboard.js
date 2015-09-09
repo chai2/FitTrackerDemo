@@ -3,6 +3,7 @@ var Account = require('./account');
 var Friends = require('./friends');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
+var Icon = require('react-native-vector-icons/Ionicons');
 
 var {
   Text,
@@ -51,22 +52,7 @@ class Dashboard extends React.Component{
     };
   }
 
-  makeBackground(btn){
-    var obj = {
-      flexDirection: 'row',
-      alignSelf: 'stretch',
-      justifyContent: 'center',
-      flex: 1
-    }
-    if(btn === 0){
-      obj.backgroundColor = '#48BBEC';
-    } else if (btn === 1){
-      obj.backgroundColor = '#E77AAE';
-    } else {
-      obj.backgroundColor = '#758BF4';
-    }
-    return obj;
-  }
+
   render(){
 
     return (
@@ -78,50 +64,62 @@ class Dashboard extends React.Component{
         tintColor='#69E3C8'
 
         styles={styles.tabBar}>
-        <TabBarIOS.Item
-          name="home"
-          title={'dashboard'}
+
+        <Icon.TabBarItem
+          title="Dashboard"
+          iconName="ios-home-outline"
+          selectedIconName="ios-home"
           selected={this.state.selectedTab === 'dashboard'}
-          icon={{uri:'featured'}}
-          iconName={'ion|ios-home-outline'}
-          iconSize={32}
           onPress={() => {
-              this.setState({
-                  selectedTab: 'dashboard'
-              });
+            this.setState({
+              selectedTab: 'dashboard',
+            });
           }}>
           <View style={styles.container}>
             <Text> Welcome to dashboard </Text>
           </View>
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          name="friends"
-          title={'friends'}
-          selected={this.state.selectedTab === 'friend'}
-          iconName={'ion|ios-home-outline'}
-          // icon={{uri:'http://i.imgur.com/iVVVMRX.png'}}
+        </Icon.TabBarItem>
+
+        <Icon.TabBarItem
+          title="Challenges"
+          iconName="ios-color-filter-outline"
+          selectedIconName="ios-color-filter"
+          selected={this.state.selectedTab === 'challenge'}
           onPress={() => {
-                this.setState({
-                    selectedTab: 'friend',
-                });
+            this.setState({
+              selectedTab: 'challenge',
+            });
+          }}>
+          <View style={styles.container}>
+            <Text> Welcome to Challengers </Text>
+          </View>
+        </Icon.TabBarItem>
+
+        <Icon.TabBarItem
+          title="Friends"
+          iconName="ios-people-outline"
+          selectedIconName="ios-people"
+          selected={this.state.selectedTab === 'friends'}
+          onPress={() => {
+            this.setState({
+              selectedTab: 'friends',
+            });
           }}>
           <Friends navigate={this.props.navigate}/>
-        </TabBarIOS.Item>
-        <TabBarIOS.Item
-          name="account"
-          title={'account'}
-          icon={{uri:'contacts'}}
-          selected={this.state.selectedTab === 'account'}
-          iconName={'ion|ios-home-outline'}
+        </Icon.TabBarItem>
 
-          // icon={{uri:'http://i.imgur.com/iVVVMRX.png'}}
+        <Icon.TabBarItem
+          title="Account"
+          iconName="ios-cog-outline"
+          selectedIconName="ios-cog"
+          selected={this.state.selectedTab === 'account'}
           onPress={() => {
-                this.setState({
-                    selectedTab: 'account',
-                });
+            this.setState({
+              selectedTab: 'account',
+            });
           }}>
           <Account navigate={this.props.navigate}/>
-        </TabBarIOS.Item>
+        </Icon.TabBarItem>
       </TabBarIOS>
     );
   }

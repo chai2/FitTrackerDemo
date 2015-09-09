@@ -118,28 +118,7 @@ var Friends = React.createClass({
         }
       }
     ).then((res) => res.json()).then((res) => this.getFriendsInfo(res))
-    //
-    // var friends = fetch(
-    //     'https://api.fitbit.com/1/user/-/friends.json',
-    //     {
-    //       method: 'GET',
-    //       headers: {
-    //         'Authorization': `Bearer ${this.state && this.state.access_token}`
-    //       }
-    //     }
-    //   ).then((res) => res.json())
 
-    // var friends = fetch(
-    //   'https://api.fitbit.com/1/user/-/friends.json',
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'Authorization': `Bearer ${this.state && this.state.access_token}`
-    //     }
-    //   }
-    // ).then((res) => res.json())
-    // .then((res) => this.getFriendsInfo(res))
-    // ).then((res) => this.getUserInfo(res))
   },
 
 
@@ -147,7 +126,6 @@ var Friends = React.createClass({
 
     return (
       <View style={styles.container}>
-      <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
         <TouchableHighlight
             style={styles.signup}>
             <Text>My Friends</Text>
