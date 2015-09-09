@@ -73,8 +73,10 @@ class Dashboard extends React.Component{
 
       <TabBarIOS
         selectedTab={this.state.selectedTab}
-        tintColor={'#c1d82f'}
-        barTintColor={'#000000'}
+        barTintColor='#FFF'
+        titleTextColor='#c1d82f'
+        tintColor='#69E3C8'
+
         styles={styles.tabBar}>
         <TabBarIOS.Item
           name="home"
@@ -89,7 +91,6 @@ class Dashboard extends React.Component{
               });
           }}>
           <View style={styles.container}>
-            <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
             <Text> Welcome to dashboard </Text>
           </View>
         </TabBarIOS.Item>

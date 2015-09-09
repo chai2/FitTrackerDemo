@@ -40,11 +40,12 @@ function fitbitOauth (app_key, callback) {
     '&client_id=' + '229VM9',
     '&redirect_uri=oauth2example://foo',
     `&state=${state}`,
-    '&scope=profile+social',
+    '&scope=profile social weight activity location heartrate activity settings sleep',
     '&expires_in=2592000'
   ].join(''))
 }
 var userInfo;
+var friendsInfo;
 
 var Friends = React.createClass({
   componentDidMount: function () {
@@ -54,28 +55,48 @@ var Friends = React.createClass({
     })
   },
 
-  getUserInfo: function(res) {
-    // userInfo.name = res.displayName;
+  navigatetoLeaderboard: function(user, friends){
 
-    userInfo = res;
+    var dataf = merge(user,friends);
 
-    console.log(userInfo);
-
-    console.log("nav");
+    var Leaderboard = require('./leaderboard');
 
     this.props.navigate.push({
       title: 'Leaderboard',
       component: Leaderboard,
-      passProps: {userInfo: userInfo}
+      passProps: {dataf: dataf}
+    })
+  },
+
+  getUserInfo: function(res) {
+
+    userInfo = res;
+
+    // console.log(userInfo);
+
+    return userInfo;
+  },
+
+  getFriendsInfo: function(res){
+    friendsInfo = res;
+    // return friendsInfo;
+
+    console.log("boomya");
+
+    var Leaderboard = require('./leaderboard');
+
+    this.props.navigate.push({
+      title: 'Leaderboard',
+      component: Leaderboard,
+      passProps: {userInfo: userInfo, friendsInfo: friendsInfo}
     })
 
   },
 
   onMakeFolderPressed: function () {
 
-
     console.log(this.state && this.state.access_token);
-    fetch(
+    var user = fetch(
       'https://api.fitbit.com/1/user/-/profile.json',
       {
         method: 'GET',
@@ -83,11 +104,46 @@ var Friends = React.createClass({
           'Authorization': `Bearer ${this.state && this.state.access_token}`
         }
       }
-    ).then((res) => this.getUserInfo(res))
-  },
-  render: function() {
+    ).then((res) => res.json()).then((res) => this.getUserInfo(res))
 
-    console.log("Friends Navigate:", this.props.navigate);
+    console.log("response");
+    console.log(user);
+
+    var friends = fetch(
+      'https://api.fitbit.com/1/user/-/friends.json',
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${this.state && this.state.access_token}`
+        }
+      }
+    ).then((res) => res.json()).then((res) => this.getFriendsInfo(res))
+    //
+    // var friends = fetch(
+    //     'https://api.fitbit.com/1/user/-/friends.json',
+    //     {
+    //       method: 'GET',
+    //       headers: {
+    //         'Authorization': `Bearer ${this.state && this.state.access_token}`
+    //       }
+    //     }
+    //   ).then((res) => res.json())
+
+    // var friends = fetch(
+    //   'https://api.fitbit.com/1/user/-/friends.json',
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'Authorization': `Bearer ${this.state && this.state.access_token}`
+    //     }
+    //   }
+    // ).then((res) => res.json())
+    // .then((res) => this.getFriendsInfo(res))
+    // ).then((res) => this.getUserInfo(res))
+  },
+
+
+  render: function() {
 
     return (
       <View style={styles.container}>

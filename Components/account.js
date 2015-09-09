@@ -40,7 +40,6 @@ class Account extends React.Component{
 
     return (
       <View style={styles.container}>
-      <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
         <Text>My Account</Text>
       </View>
     );

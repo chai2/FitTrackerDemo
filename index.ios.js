@@ -23,6 +23,8 @@ var FitTracker = React.createClass({
   render: function() {
     return (
       <NavigatorIOS
+      barTintColor='#69E3C8'
+      titleTextColor='#fff'
         style={styles.container}
         initialRoute={{
           title: 'FitApp',
