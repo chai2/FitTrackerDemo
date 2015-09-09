@@ -2,17 +2,17 @@
 
 Libraries Used: 
 
-FitBit Oauth2 with Linking IOS - https://dev.fitbit.com/docs/oauth2/
+* FitBit Oauth2 with Linking IOS - https://dev.fitbit.com/docs/oauth2/
 
-React Native Material Design - https://github.com/xinthink/react-native-material-kit
+* React Native Material Design - https://github.com/xinthink/react-native-material-kit
 
-React Native Vector Icons - https://github.com/oblador/react-native-vector-icons
+* React Native Vector Icons - https://github.com/oblador/react-native-vector-icons
 
-React Native Parse(for user signup/logging) - https://github.com/ParsePlatform/ParseReact
+* React Native Parse(for user signup/logging) - https://github.com/ParsePlatform/ParseReact
 
-React Native Router - https://github.com/t4t5/react-native-router
+* React Native Router - https://github.com/t4t5/react-native-router
 
-Query String Parser - https://www.npmjs.com/package/shitty-qs
+* Query String Parser - https://www.npmjs.com/package/shitty-qs
 
 Fonts Used:
 
