@@ -27,7 +27,7 @@ var FitTracker = React.createClass({
       titleTextColor='#fff'
         style={styles.container}
         initialRoute={{
-          title: 'FitApp',
+          title: 'Fit Tracker',
           component: Main,
           passProps: {myProp: 'boom', hideNavBar: true}
         }}/>

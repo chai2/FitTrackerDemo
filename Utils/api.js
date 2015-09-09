@@ -27,6 +27,38 @@ var api = {
       'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ'
       }
     }).then((res) => res.json());
+  },
+
+  fetchFriendsInfo(state,access_token) {
+    console.log("In Api");
+    console.log("state", state);
+    console.log("access token"+access_token);
+
+    fetch(
+      'https://api.fitbit.com/1/user/-/profile.json',
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${state && access_token}`
+        }
+      }
+    ).then((res) => res.json())
+  },
+
+  fetchUserInfo(state,access_token) {
+    console.log("In User Info API");
+    console.log("state"+state);
+    console.log("access token"+access_token);
+
+    fetch(
+      'https://api.fitbit.com/1/user/-/user.json',
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${state && access_token}`
+        }
+      }
+    ).then((res) => res.json())
   }
 
 };
