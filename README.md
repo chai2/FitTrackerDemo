@@ -8,6 +8,8 @@ Libraries Used:
 
 * React Native Vector Icons - https://github.com/oblador/react-native-vector-icons
 
+NPM Packages Used:
+
 * React Native Parse(for user signup/logging) - https://github.com/ParsePlatform/ParseReact
 
 * React Native Router - https://github.com/t4t5/react-native-router
