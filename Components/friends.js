@@ -33,26 +33,31 @@ var Friends = React.createClass({
       featuredCollectionsDataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
       allCollectionsDataSource: new ListView.DataSource({rowHasChanged: (r1, r2) => r1 !== r2}),
       selectedTab: 'Leaderboard',
-      loaded: false
+      loaded: false,
+      friendsapidata: ''
     }
   },
 
   componentDidMount: function(){
     var state = Math.random() + '';
+    var friendsapidata;
 
     console.log("Access token in friends:", this.props);
-    // return fetch(
-    //   'https://api.fitbit.com/1/user/-/friends.json',
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'Authorization': `Bearer ${state && this.props.fitaccess_token}`
-    //     }
-    //   }
-    // ).then((res) => res.json())
-    // .then((res) => {
-    //   friendsInfo = res;
-    // })
+    return fetch(
+      'https://api.fitbit.com/1/user/-/friends.json',
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${state && this.props.friendsData}`
+        }
+      }
+    ).then((res) => res.json())
+    .then((res) => {
+      console.log("here res", res);
+      this.state({
+        friendsapidata: res
+      })
+    })
 
   },
 
@@ -69,7 +74,7 @@ var Friends = React.createClass({
                 selectedTab: val
               })
             }} />
-            <Text> Hello {this.props} </Text>
+            <Text> Hello {this.friendsapidata} </Text>
         </View>
       );
   },

@@ -60,23 +60,6 @@ var friendsInfo;
 
 class Dashboard extends React.Component{
 
-  // getDefaultProps(){
-  //   return{
-  //     userdata: this.props
-  //   };
-  //
-  //   console.log("Prop values", this.props);
-  //
-  // }
-  //
-  // getInitialState(){
-  //   return{
-  //     value: "hello"
-  //   };
-  //   console.log("initialRoute");
-  // }
-
-
   constructor(props) {
     super(props);
 
@@ -86,49 +69,6 @@ class Dashboard extends React.Component{
       selectedTab: ''
     };
   }
-  //
-  // componentDidMount () {
-  //   var state = Math.random() + ''
-  //
-  //   fitbitOauth(config.fitbit_app_key, (err, access_token) => {
-  //     if (err) {
-  //       console.log(err)
-  //     }
-  //     this.setState({
-  //       access_token: access_token
-  //     })
-  //
-  //     fetch(
-  //       'https://api.fitbit.com/1/user/-/friends.json',
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           'Authorization': `Bearer ${state && access_token}`
-  //         }
-  //       }
-  //     ).then((res) => res.json()).then((res) => this.getFriendsInfo(res))
-  //
-  //     fetch(
-  //       'https://api.fitbit.com/1/user/-/profile.json',
-  //       {
-  //         method: 'GET',
-  //         headers: {
-  //           'Authorization': `Bearer ${state && access_token}`
-  //         }
-  //       }
-  //     ).then((res) => res.json()).then((res) => this.getUserInfo(res))
-  //   })
-  // }
-  //
-  // getUserInfo(res){
-  //   userdata = res;
-  //   return userdata;
-  // }
-  //
-  // getFriendsInfo(res){
-  //   friendsInfo = res;
-  //   return friendsInfo;
-  // }
 
   getFriendsInfo(){
 
@@ -205,8 +145,7 @@ class Dashboard extends React.Component{
               selectedTab: 'friends',
             });
           }}>
-          <Friends friendsData = { this.getFriendsInfo() }
-          />
+          <Friends friendsData = { this.props.fitAccessToken } />
         </Icon.TabBarItem>
 
         <Icon.TabBarItem
@@ -219,7 +158,7 @@ class Dashboard extends React.Component{
               selectedTab: 'account',
             });
           }}>
-          <Account userInfo={this.props.userInfo, this.props.userfitdata} />
+          <Account accountInfo={[this.props.userInfo, this.props.userfitdata]} />
         </Icon.TabBarItem>
       </TabBarIOS>
     );

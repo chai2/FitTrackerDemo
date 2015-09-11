@@ -9,6 +9,7 @@ var windowSize = Dimensions.get('window');
 var {
  View,
  ListView,
+ Image,
  SegmentedControlIOS,
  StyleSheet,
  Text
@@ -21,7 +22,7 @@ var styles = StyleSheet.create({
     flex: 1,
   },
   image: {
-    height: 350,
+    height: 75,
   },
   bg: {
     position: 'absolute',
@@ -47,23 +48,29 @@ class Account extends React.Component{
 
   constructor(props) {
     super(props);
-    console.log(this.props);
+    console.log(this.props.accountInfo[0]);
   }
 
   componentDidMount() {
     console.log("I'm in account")
-    console.log(this.props);
+    console.log(this.props.accountInfo[0].email);
   }
 
   render() {
     return (
         <View style={styles.container}>
-          <Text> My account {this.props} </Text>
+          <Text> Username: {this.props.accountInfo[0].username} </Text>
+          <Text> Email: {this.props.accountInfo[0].email} </Text>
+          <Text> Password: </Text>
+
         </View>
     );
   }
-
 };
 
+
+Account.propTypes = {
+  accountInfo: React.PropTypes.object.isRequired
+}
 
 module.exports = Account;
