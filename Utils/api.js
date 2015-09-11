@@ -14,6 +14,8 @@ var api = {
   },
 
   fetchFriendsInfo(state,access_token) {
+    console.log("friends"+access_token);
+
     fetch(
       'https://api.fitbit.com/1/user/-/profile.json',
       {
@@ -22,7 +24,7 @@ var api = {
           'Authorization': `Bearer ${state && access_token}`
         }
       }
-    ).then((res) => res.json())
+    ).then((res) => res.json());
   },
 
   fetchUserInfo(state,access_token) {

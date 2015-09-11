@@ -3,6 +3,8 @@ var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Signup = require('./Signup');
 var api = require('../Utils/api');
+var config = require('../config');
+var shittyQs = require('shitty-qs');
 
 var {
   Text,
@@ -11,7 +13,9 @@ var {
   Image,
   StyleSheet,
   TextInput,
-  TouchableHighlight
+  TouchableHighlight,
+  LinkingIOS,
+  ActivityIndicatorIOS
 } = React;
 
 var styles = StyleSheet.create({
@@ -89,6 +93,36 @@ var styles = StyleSheet.create({
     }
 });
 
+function fitbitOauth (app_key, callback) {
+  var state = Math.random() + ''
+
+  LinkingIOS.addEventListener('url', handleUrl)
+
+  function handleUrl (event) {
+    var [, query_string] = event.url.match(/\#(.*)/)
+    var query = shittyQs(query_string)
+    if (state === query.state) {
+      callback(null, query.access_token, query.uid)
+    } else {
+      callback(new Error('Oauth2 security error'))
+    }
+    LinkingIOS.removeEventListener('url', handleUrl)
+  }
+
+  LinkingIOS.openURL([
+    'https://www.fitbit.com/oauth2/authorize',
+    '?response_type=token',
+    '&client_id=' + '229VKW',
+    '&redirect_uri=leaderboard://authy',
+    `&state=${state}`,
+    '&scope=profile social weight activity location heartrate activity settings sleep',
+    '&expires_in=2592000'
+  ].join(''))
+}
+
+var userfitdata;
+var friendsInfo;
+
 class Signin extends React.Component{
   constructor(props){
     super(props)
@@ -97,6 +131,8 @@ class Signin extends React.Component{
       username: '',
       password: '',
       email: '',
+      isLoading: false,
+      error: false,
       isUser: false
     }
   }
@@ -117,36 +153,119 @@ class Signin extends React.Component{
     this.props.navigate.push({
       title: 'Sign Up',
       component: Signup,
-      passProps: {navigate: this.props.navigate }
+      passProps: { navigate: this.props.navigate }
     })
   }
 
-  handleResponse(res){
+  handleResponse(user_login_info){
+  var loginData = user_login_info;
 
-  var dat = res;
-  var Dashboard = require('./Dashboard');
-    this.props.navigate.push({
-      title: 'Dashboard',
-      component: Dashboard,
-      passProps: {userInfo: res}
+  var state = Math.random() + '';
+
+  console.log("login data response", loginData);
+
+  if (loginData.error){
+    console.log("failed login");
+    this.setState({
+      isLoading: false,
+      error: `Error: ${loginData.error}`
     })
+  } else {
+    console.log("successful login");
+
+    fitbitOauth(config.fitbit_app_key, (err, access_token) => {
+      if (err) {
+        console.log(err)
+      }
+      this.setState({
+        access_token: access_token
+      })
+
+      console.log("Fit Token:" + access_token);
+
+      return fetch(
+        'https://api.fitbit.com/1/user/-/profile.json',
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${state && access_token}`
+          }
+        }
+      ).then((res) => res.json()).then((res) => {
+        var Dashboard = require('./Dashboard');
+        this.props.navigate.push({
+          title: 'Dashboard',
+          component: Dashboard,
+          passProps: {userInfo: loginData, userfitdata: res, fitAccessToken: access_token }
+        })
+      })
+
+      // fetch(
+      //   'https://api.fitbit.com/1/user/-/profile.json',
+      //   {
+      //     method: 'GET',
+      //     headers: {
+      //       'Authorization': `Bearer ${state && access_token}`
+      //     }
+      //   }
+      // ).then((res) => res.json())
+      // .then((res) => { userdata = res; });
+
+      // console.log("dgjhsfgfdsg", this.friendsInfo);
+      //
+      // var Dashboard = require('./Dashboard');
+      //   this.props.navigate.push({
+      //     title: 'Dashboard',
+      //     component: Dashboard,
+      //     passProps: {userInfo: loginData, userdata: this.userdata, friendsInfo: this.friendsInfo }
+      //   })
+    })
+  }
+
+  // getUserInfo(res){
+  //   userdata = this.res;
+  //   console.log("supreme", userdata);
+  //   return userdata;
+  // }
+  //
+  // getFriendsInfo(res){
+  //   friendsInfo = res;
+  //   return friendsInfo;
+  // }
+
+  // console.log("cool", this.loginData);
+  //
+  // var Dashboard = require('./Dashboard');
+  //   this.props.navigate.push({
+  //     title: 'Dashboard',
+  //     component: Dashboard,
+  //     passProps: {userInfo: loginData, userdata: userdata, friendsInfo: friendsInfo }
+  //   })
   }
 
   handleSubmit(e){
 
     api.performAuth(this.state.username, this.state.password)
-    .then((jsonRes) => this.handleResponse(jsonRes));
+    .then((jsonRes) => this.handleResponse(jsonRes))
+    .catch((err) => {
+      this.setState({
+        isLoading: false,
+        error: `There was an error: ${err}`
+      })
+    })
   }
 
   render(){
-
+    var showErr = (
+      this.state.error ? <Text> {this.state.error} </Text> : <View></View>
+    );
     return (
       <View style={styles.container}>
         <Image style={styles.bg} source={{uri: 'http://i.imgur.com/xlQ56UK.jpg'}} />
         <View style={styles.header}>
             <Image style={styles.mark} source={{uri: 'http://i.imgur.com/da4G0Io.png'}} />
         </View>
-
+          {showErr}
         <View style={styles.inputs}>
             <View style={styles.inputContainer}>
                 <Image style={styles.inputUsername} source={{uri: 'http://i.imgur.com/iVVVMRX.png'}}/>
