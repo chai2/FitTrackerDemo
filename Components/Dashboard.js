@@ -6,6 +6,8 @@ var windowSize = Dimensions.get('window');
 var Icon = require('react-native-vector-icons/Ionicons');
 var config = require('../config');
 var shittyQs = require('shitty-qs');
+var Challenges = require('./challenges');
+var api = require('../Utils/api');
 
 var {
   Text,
@@ -49,6 +51,7 @@ var styles = StyleSheet.create({
   tintColor: '#877324'
 },
 instructions: {
+  marginTop: 65,
   textAlign: 'center',
   color: '#333333',
   marginBottom: 5,
@@ -63,19 +66,23 @@ class Dashboard extends React.Component{
   constructor(props) {
     super(props);
 
-    console.log("props in constructor");
+    console.log("props in constructor", this.props.userInfo.sessionToken);
+
+    console.log("User data", this.props.userfitdata);
 
     this.state = {
-      selectedTab: ''
+      selectedTab: '',
+      friendsapidata: '',
+      badgesapidata: ''
     };
   }
 
-  getFriendsInfo(){
-
-    console.log("Just here:"+this.props.fitAccessToken);
-
+  componentDidMount(){
     var state = Math.random() + '';
+    var friendsapidata;
+    var badgesapidata;
 
+    console.log("Access token in friends:", this.props.fitAccessToken);
     return fetch(
       'https://api.fitbit.com/1/user/-/friends.json',
       {
@@ -84,12 +91,81 @@ class Dashboard extends React.Component{
           'Authorization': `Bearer ${state && this.props.fitAccessToken}`
         }
       }
-    ).then((res) => res.json()).then((res) => this.handleFriendsdata(res).done())
+    ).then((res) => res.json())
+    .then((res) => {
+      this.state({
+        friendsapidata: this.res
+      })
+      console.log("This friends from dashboard:"+this.friendsapidata);
+    })
+
+    return fetch(
+      'https://api.fitbit.com/1/user/-/badges.json',
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${state && this.props.fitAccessToken}`
+        }
+      }
+    ).then((res) => res.json())
+    .then((res) => {
+      this.state({
+        badgesapidata: this.res
+      })
+      console.log("This friends from dashboard:"+this.badgesapidata);
+    })
+
+    // https://api.fitbit.com/1/user/[user-id]/badges.json
+
+    // api.setCurrentUser(this.props.userInfo.sessionToken)
+    // .then((jsonRes) => this.handleLoginResponse(jsonRes))
+    // .catch((err) => {
+    //   this.setState({
+    //     isLoading: false,
+    //     error: `There was an error: ${err}`
+    //   })
+    // })
+
+    // return fetch(
+    //   'https://api.parse.com/1/users/me',
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
+    //       'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ',
+    //       'X-Parse-Session-Token': `${access_token}`
+    //     }
+    // })
+
+    console.log("Here 123");
+
   }
 
-  handleFriendsdata(res){
-    return res;
+  handleLoginResponse(loginResponse){
+    var currentUser = loginResponse;
+    console.log("Current User", currentUser);
   }
+
+  // getFriendsInfo(){
+  //
+  //   console.log("Just here:"+this.props.fitAccessToken);
+  //
+  //   var state = Math.random() + '';
+  //
+  //   return fetch(
+  //     'https://api.fitbit.com/1/user/-/friends.json',
+  //     {
+  //       method: 'GET',
+  //       headers: {
+  //         'Authorization': `Bearer ${state && this.props.fitAccessToken}`
+  //       }
+  //     }
+  //   ).then((res) => res.json()).then((res) => this.handleFriendsdata(res).done())
+  // }
+  //
+  // handleFriendsdata(res){
+  //   return res;
+  // }
 
   render(){
     var state = Math.random() + ''
@@ -115,7 +191,9 @@ class Dashboard extends React.Component{
             });
           }}>
           <Text style={styles.instructions}>
-            Welcome to dashboard  Toekn: {this.props.fitAccessToken} {this.props.userfitdata}
+            My Activity {this.props.userfitdata.user.strideLengthRunning + '\n\n'}
+            Average Steps Taken {this.props.userfitdata.user.averageDailySteps + '\n\n'}
+            My Goals to Reach:
           </Text>
         </Icon.TabBarItem>
 
@@ -131,7 +209,7 @@ class Dashboard extends React.Component{
           }}>
           <View style={styles.container}>
             <Text> Welcome to Challengers </Text>
-            {}
+            <Challenges badgeData = { this.props.badgesapidata } />
           </View>
         </Icon.TabBarItem>
 
@@ -145,7 +223,7 @@ class Dashboard extends React.Component{
               selectedTab: 'friends',
             });
           }}>
-          <Friends friendsData = { this.props.fitAccessToken } />
+          <Friends friendsData = { [this.props.fitAccessToken, this.props.friendsapidata] } />
         </Icon.TabBarItem>
 
         <Icon.TabBarItem

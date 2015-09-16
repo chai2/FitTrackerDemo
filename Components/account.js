@@ -5,6 +5,7 @@ var CollectionCell = require('./leaderboard');
 var SingleCollection = require('./friends');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
+var Separator = require('./Helpers/Separator');
 
 var {
  View,
@@ -12,17 +13,14 @@ var {
  Image,
  SegmentedControlIOS,
  StyleSheet,
- Text
+ Text,
+ ScrollView
 } = React;
 
 
 var styles = StyleSheet.create({
   container: {
-    marginTop: 64,
     flex: 1,
-  },
-  image: {
-    height: 75,
   },
   bg: {
     position: 'absolute',
@@ -31,40 +29,87 @@ var styles = StyleSheet.create({
     width: windowSize.width,
     height: windowSize.height
   },
+  tabBar: {
+    backgroundColor: '#dfdfdf',
+    flex: 1,
+    color: '#ff0000',
+    tintColor: '#877324'
+  },
   buttonText: {
-    fontSize: 24,
+    fontSize: 18,
     color: 'white',
     alignSelf: 'center'
   },
-  tabBar: {
-  backgroundColor: '#dfdfdf',
-  flex: 1,
-  color: '#ff0000',
-  tintColor: '#877324'
-}
+  rowContainer: {
+    padding: 10
+  },
+  rowTitle: {
+    color: '#69E3C8',
+    fontSize: 16
+  },
+  rowContent: {
+    fontSize: 19
+  },
+  image: {
+    height: 125,
+    width: 125,
+    borderRadius: 65,
+    marginTop: 10,
+    alignSelf: 'center'
+  },
+  name: {
+    alignSelf: 'center',
+    fontSize: 21,
+    marginTop: 10,
+    marginBottom: 5,
+    color: 'black'
+  },
+  handle: {
+    alignSelf: 'center',
+    fontSize: 16,
+    color: 'black'
+  },
+  Scrollcontainer: {
+    backgroundColor: '#F5F5F0',
+    paddingBottom: 10
+  }
 });
 
 class Account extends React.Component{
 
-  constructor(props) {
-    super(props);
-    console.log(this.props.accountInfo[0]);
-  }
-
-  componentDidMount() {
-    console.log("I'm in account")
-    console.log(this.props.accountInfo[0].email);
+  getRowTitle(user, item){
+    return item;
   }
 
   render() {
-    return (
-        <View style={styles.container}>
-          <Text> Username: {this.props.accountInfo[0].username} </Text>
-          <Text> Email: {this.props.accountInfo[0].email} </Text>
-          <Text> Password: </Text>
+    var userInfo = this.props.accountInfo[0];
+    var infoArr = ['username', 'email'];
 
-        </View>
-    );
+    var list = infoArr.map((item, index) => {
+      if(!userInfo[item]){
+        return <View key={index}/>
+      } else {
+        return (
+          <View key={index}>
+            <View style={styles.rowContainer}>
+              <Text style={styles.rowTitle}>{this.getRowTitle(userInfo, item)}</Text>
+              <Text style={styles.rowContent}> {userInfo[item]} </Text>
+            </View>
+            <Separator />
+          </View>
+        )
+      }
+    });
+
+    return (
+      <ScrollView style={styles.Scrollcontainer}>
+        <Image style={styles.image} source={{uri: this.props.accountInfo[1].user.avatar150}}/>
+        <Text style={styles.name}> {this.props.accountInfo[1].user.displayName} </Text>
+        <Text style={styles.handle}> {this.props.accountInfo[1].user.nickname} </Text>
+        {list}
+      </ScrollView>
+    )
+
   }
 };
 

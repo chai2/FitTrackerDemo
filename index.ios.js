@@ -16,6 +16,13 @@ var {
 } = React;
 
 var FitTracker = React.createClass({
+
+  getInitialState: function(){
+    return{
+      isNavBarHidden: false
+    };
+  },
+
   hideNavBar: function(){
     this.setState({hideNavBar: true});
   },
@@ -23,8 +30,9 @@ var FitTracker = React.createClass({
   render: function() {
     return (
       <NavigatorIOS
-      barTintColor='#69E3C8'
-      titleTextColor='#fff'
+        barTintColor='#69E3C8'
+        titleTextColor='#fff'
+        navigationBarHidden={this.state.isNavBarHidden}
         style={styles.container}
         initialRoute={{
           title: 'Fit Tracker',
