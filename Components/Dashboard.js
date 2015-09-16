@@ -8,6 +8,7 @@ var config = require('../config');
 var shittyQs = require('shitty-qs');
 var Challenges = require('./challenges');
 var api = require('../Utils/api');
+var Separator = require('./Helpers/Separator');
 
 var {
   Text,
@@ -22,7 +23,6 @@ var {
 
 var styles = StyleSheet.create({
   container: {
-    marginTop: 65,
     flex: 1
   },
   scrollView: {
@@ -45,16 +45,50 @@ var styles = StyleSheet.create({
     alignSelf: 'center'
   },
   tabBar: {
-  backgroundColor: '#dfdfdf',
-  flex: 1,
-  color: '#ff0000',
-  tintColor: '#877324'
+    backgroundColor: '#dfdfdf',
+    flex: 1,
+    color: '#ff0000',
+    tintColor: '#877324'
 },
 instructions: {
   marginTop: 65,
   textAlign: 'center',
   color: '#333333',
   marginBottom: 5,
+},
+rowContainer: {
+  padding: 10
+},
+rowTitle: {
+  color: '#69E3C8',
+  fontSize: 16
+},
+rowContent: {
+  fontSize: 19
+},
+image: {
+  height: 125,
+  width: 125,
+  borderRadius: 65,
+  marginTop: 10,
+  alignSelf: 'center'
+},
+name: {
+  alignSelf: 'center',
+  fontSize: 21,
+  marginTop: 10,
+  marginBottom: 5,
+  color: 'black'
+},
+handle: {
+  alignSelf: 'center',
+  fontSize: 16,
+  color: 'black'
+},
+Scrollcontainer: {
+  backgroundColor: '#F5F5F0',
+  paddingBottom: 10,
+  marginTop: 65
 }
 });
 
@@ -83,7 +117,7 @@ class Dashboard extends React.Component{
     var badgesapidata;
 
     console.log("Access token in friends:", this.props.fitAccessToken);
-    return fetch(
+    fetch(
       'https://api.fitbit.com/1/user/-/friends.json',
       {
         method: 'GET',
@@ -99,7 +133,7 @@ class Dashboard extends React.Component{
       console.log("This friends from dashboard:"+this.friendsapidata);
     })
 
-    return fetch(
+    fetch(
       'https://api.fitbit.com/1/user/-/badges.json',
       {
         method: 'GET',
@@ -112,30 +146,8 @@ class Dashboard extends React.Component{
       this.state({
         badgesapidata: this.res
       })
-      console.log("This friends from dashboard:"+this.badgesapidata);
+      console.log("This badges from dashboard:"+this.badgesapidata);
     })
-
-    // https://api.fitbit.com/1/user/[user-id]/badges.json
-
-    // api.setCurrentUser(this.props.userInfo.sessionToken)
-    // .then((jsonRes) => this.handleLoginResponse(jsonRes))
-    // .catch((err) => {
-    //   this.setState({
-    //     isLoading: false,
-    //     error: `There was an error: ${err}`
-    //   })
-    // })
-
-    // return fetch(
-    //   'https://api.parse.com/1/users/me',
-    //   {
-    //     method: 'GET',
-    //     headers: {
-    //       'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
-    //       'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ',
-    //       'X-Parse-Session-Token': `${access_token}`
-    //     }
-    // })
 
     console.log("Here 123");
 
@@ -146,29 +158,74 @@ class Dashboard extends React.Component{
     console.log("Current User", currentUser);
   }
 
-  // getFriendsInfo(){
-  //
-  //   console.log("Just here:"+this.props.fitAccessToken);
-  //
-  //   var state = Math.random() + '';
-  //
-  //   return fetch(
-  //     'https://api.fitbit.com/1/user/-/friends.json',
-  //     {
-  //       method: 'GET',
-  //       headers: {
-  //         'Authorization': `Bearer ${state && this.props.fitAccessToken}`
-  //       }
-  //     }
-  //   ).then((res) => res.json()).then((res) => this.handleFriendsdata(res).done())
-  // }
-  //
-  // handleFriendsdata(res){
-  //   return res;
-  // }
+  getFriendsInfo(){
+
+    console.log("Just here:"+this.props.fitAccessToken);
+
+    var state = Math.random() + '';
+
+    return fetch(
+      'https://api.fitbit.com/1/user/-/friends.json',
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${state && this.props.fitAccessToken}`
+        }
+      }
+    ).then((res) => res.json()).then((res) => this.handleFriendsdata(res).done())
+  }
+
+  handleActivitydata(res){
+    var activityInfo = res;
+    return res;
+  }
+
+  getRowTitle(user, item){
+    return item;
+  }
+
+  getActivityInfo(){
+    console.log("Just here:"+this.props.fitAccessToken);
+
+    var state = Math.random() + '';
+
+    return fetch(
+      'https://api.fitbit.com/1/user/-/activities/date/today/1d.json',
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${state && this.props.fitAccessToken}`
+        }
+      }
+    ).then((res) => res.json()).then((res) => handleActivitydata(res).done())
+  }
 
   render(){
     var state = Math.random() + ''
+    var fitbitInfo = this.props.userfitdata.user;
+
+    console.log("hello here:",fitbitInfo);
+    console.log("This activity from dashboard:", this.getActivityInfo().call);
+
+    var infoArr = ['strideLengthRunning', 'averageDailySteps'];
+
+    var list = infoArr.map((item, index) => {
+      if(!fitbitInfo[item]){
+        return <View key={index}/>
+      } else {
+        return (
+          <View key={index}>
+            <View style={styles.rowContainer}>
+              <Text style={styles.rowTitle}>{this.getRowTitle(fitbitInfo, item)}</Text>
+              <Text style={styles.rowContent}> {fitbitInfo[item]} </Text>
+            </View>
+            <Separator />
+          </View>
+        )
+      }
+
+    });
+
 
     return (
 
@@ -190,11 +247,10 @@ class Dashboard extends React.Component{
               selectedTab: 'dashboard',
             });
           }}>
-          <Text style={styles.instructions}>
-            My Activity {this.props.userfitdata.user.strideLengthRunning + '\n\n'}
-            Average Steps Taken {this.props.userfitdata.user.averageDailySteps + '\n\n'}
-            My Goals to Reach:
-          </Text>
+
+          <ScrollView style={styles.Scrollcontainer}>
+            {list}
+          </ScrollView>
         </Icon.TabBarItem>
 
         <Icon.TabBarItem
