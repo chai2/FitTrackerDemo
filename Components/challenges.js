@@ -48,13 +48,32 @@ class Challenges extends React.Component{
 
   constructor(props) {
     super(props);
-    console.log(this.props.badgeData);
+    // console.log(this.props.badgeData);
   }
 
   componentDidMount() {
     console.log("I'm in challenges");
     console.log(this.props);
     // console.log(this.props.accountInfo[1]);
+
+    // return fetch(
+    //   'https://api.fitbit.com/1/user/-/badges.json',
+    //   {
+    //     method: 'GET',
+    //     headers: {
+    //       'Authorization': `Bearer ${state && this.props.fitAccessToken}`
+    //     }
+    //   }
+    // ).then((res) => res.json())
+    // .then((res) => {
+    //   this.state({
+    //     badgesapidata: this.res
+    //   })
+    //   console.log("This badges from dashboard:"+this.badgesapidata);
+    // })
+
+    console.log("Here 123");
+
   }
 
   render() {

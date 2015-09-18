@@ -92,122 +92,73 @@ Scrollcontainer: {
 }
 });
 
-var userInfo;
-var friendsInfo;
+// var userInfo;
+// var friendsInfo;
+// var activity_step;
 
 class Dashboard extends React.Component{
 
   constructor(props) {
     super(props);
-
-    console.log("props in constructor", this.props.userInfo.sessionToken);
-
-    console.log("User data", this.props.userfitdata);
-
     this.state = {
-      selectedTab: '',
-      friendsapidata: '',
-      badgesapidata: ''
+      selectedTab: ''
     };
   }
 
   componentDidMount(){
     var state = Math.random() + '';
+
     var friendsapidata;
     var badgesapidata;
+    var activityInfo;
 
-    console.log("Access token in friends:", this.props.fitAccessToken);
-    fetch(
-      'https://api.fitbit.com/1/user/-/friends.json',
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${state && this.props.fitAccessToken}`
-        }
-      }
-    ).then((res) => res.json())
-    .then((res) => {
-      this.state({
-        friendsapidata: this.res
+    api.fetchFriendsInfo(state,this.props.fitAccessToken)
+      .then((res) => this.handleFriendssdata(res))
+
+    api.fetchBadgesInfo(state, this.props.fitAccessToken)
+      .then((res) => this.handleBadgesdata(res))
+
+    api.fetchUserActivityStepsInfo(state,this.props.fitAccessToken)
+      .then((jsonRes) => {
+        console.log("Activity Response: ", jsonRes);
+
+        this.setState ({
+          activityInfo: jsonRes
+        });
       })
-      console.log("This friends from dashboard:"+this.friendsapidata);
-    })
-
-    fetch(
-      'https://api.fitbit.com/1/user/-/badges.json',
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${state && this.props.fitAccessToken}`
-        }
-      }
-    ).then((res) => res.json())
-    .then((res) => {
-      this.state({
-        badgesapidata: this.res
-      })
-      console.log("This badges from dashboard:"+this.badgesapidata);
-    })
-
-    console.log("Here 123");
-
-  }
-
-  handleLoginResponse(loginResponse){
-    var currentUser = loginResponse;
-    console.log("Current User", currentUser);
-  }
-
-  getFriendsInfo(){
-
-    console.log("Just here:"+this.props.fitAccessToken);
-
-    var state = Math.random() + '';
-
-    return fetch(
-      'https://api.fitbit.com/1/user/-/friends.json',
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${state && this.props.fitAccessToken}`
-        }
-      }
-    ).then((res) => res.json()).then((res) => this.handleFriendsdata(res).done())
   }
 
   handleActivitydata(res){
     var activityInfo = res;
-    return res;
+    console.log("Activity Info: ", res);
+    return activityInfo;
+  }
+
+  handleFriendssdata(res){
+    var friendsInfo = res;
+    console.log("Friends Info: ", res);
+    return friendsInfo;
+  }
+
+  handleBadgesdata(res){
+    var badgesapidata = res;
+    console.log("Badges Info: ", res);
+    return badgesapidata;
   }
 
   getRowTitle(user, item){
     return item;
   }
 
-  getActivityInfo(){
-    console.log("Just here:"+this.props.fitAccessToken);
-
+  render(){
     var state = Math.random() + '';
 
-    return fetch(
-      'https://api.fitbit.com/1/user/-/activities/date/today/1d.json',
-      {
-        method: 'GET',
-        headers: {
-          'Authorization': `Bearer ${state && this.props.fitAccessToken}`
-        }
-      }
-    ).then((res) => res.json()).then((res) => handleActivitydata(res).done())
-  }
-
-  render(){
-    var state = Math.random() + ''
-    var fitbitInfo = this.props.userfitdata.user;
-
-    console.log("hello here:",fitbitInfo);
-    console.log("This activity from dashboard:", this.getActivityInfo().call);
+    var fitbitInfo = this.props.userfitdata;
+    var userActivitySteps;
 
     var infoArr = ['strideLengthRunning', 'averageDailySteps'];
+
+    console.log("hello badges:",this.badgesapidata);
 
     var list = infoArr.map((item, index) => {
       if(!fitbitInfo[item]){
@@ -216,8 +167,10 @@ class Dashboard extends React.Component{
         return (
           <View key={index}>
             <View style={styles.rowContainer}>
-              <Text style={styles.rowTitle}>{this.getRowTitle(fitbitInfo, item)}</Text>
-              <Text style={styles.rowContent}> {fitbitInfo[item]} </Text>
+              <Text style={styles.rowTitle}> Amigo </Text>
+              <Text style={styles.rowTitle}> {this.state.activityInfo} </Text>
+              // <Text style={styles.rowTitle}>{this.getRowTitle(fitbitInfo, item)}</Text>
+              // <Text style={styles.rowContent}> {fitbitInfo[item]} </Text>
             </View>
             <Separator />
           </View>
@@ -226,9 +179,7 @@ class Dashboard extends React.Component{
 
     });
 
-
     return (
-
       <TabBarIOS
         selectedTab={this.state.selectedTab}
         barTintColor='#FFF'
@@ -248,8 +199,9 @@ class Dashboard extends React.Component{
             });
           }}>
 
-          <ScrollView style={styles.Scrollcontainer}>
-            {list}
+          <ScrollView style={styles.container}>
+            <Text style={styles.instructions}> Here buggy </Text>
+            <Text style={styles.instructions}> {this.state.activityInfo} </Text>
           </ScrollView>
         </Icon.TabBarItem>
 

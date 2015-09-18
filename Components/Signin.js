@@ -165,13 +165,11 @@ class Signin extends React.Component{
   console.log("login data response", loginData);
 
   if (loginData.error){
-    console.log("failed login");
     this.setState({
       isLoading: false,
       error: `Error: ${loginData.error}`
     })
   } else {
-    console.log("successful login");
 
     fitbitOauth(config.fitbit_app_key, (err, access_token) => {
       if (err) {
@@ -199,48 +197,8 @@ class Signin extends React.Component{
           passProps: {userInfo: loginData, userfitdata: res, fitAccessToken: access_token }
         })
       })
-
-      // fetch(
-      //   'https://api.fitbit.com/1/user/-/profile.json',
-      //   {
-      //     method: 'GET',
-      //     headers: {
-      //       'Authorization': `Bearer ${state && access_token}`
-      //     }
-      //   }
-      // ).then((res) => res.json())
-      // .then((res) => { userdata = res; });
-
-      // console.log("dgjhsfgfdsg", this.friendsInfo);
-      //
-      // var Dashboard = require('./Dashboard');
-      //   this.props.navigate.push({
-      //     title: 'Dashboard',
-      //     component: Dashboard,
-      //     passProps: {userInfo: loginData, userdata: this.userdata, friendsInfo: this.friendsInfo }
-      //   })
     })
   }
-
-  // getUserInfo(res){
-  //   userdata = this.res;
-  //   console.log("supreme", userdata);
-  //   return userdata;
-  // }
-  //
-  // getFriendsInfo(res){
-  //   friendsInfo = res;
-  //   return friendsInfo;
-  // }
-
-  // console.log("cool", this.loginData);
-  //
-  // var Dashboard = require('./Dashboard');
-  //   this.props.navigate.push({
-  //     title: 'Dashboard',
-  //     component: Dashboard,
-  //     passProps: {userInfo: loginData, userdata: userdata, friendsInfo: friendsInfo }
-  //   })
   }
 
   handleSubmit(e){

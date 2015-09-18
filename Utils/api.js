@@ -9,7 +9,7 @@ var api = {
       headers: {
       'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
       'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ',
-      'X-Parse-Revocable-Session': '1' 
+      'X-Parse-Revocable-Session': '1'
       }
     }).then((res) => res.json());
   },
@@ -29,8 +29,22 @@ var api = {
   fetchFriendsInfo(state,access_token) {
     console.log("friends"+access_token);
 
-    fetch(
-      'https://api.fitbit.com/1/user/-/profile.json',
+    return fetch(
+      'https://api.fitbit.com/1/user/-/friends.json',
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${state && access_token}`
+        }
+      }
+    ).then((res) => res.json());
+  },
+
+  fetchBadgesInfo(state,access_token) {
+    console.log("friends"+access_token);
+
+    return fetch(
+      'https://api.fitbit.com/1/user/-/friends.json',
       {
         method: 'GET',
         headers: {
@@ -42,8 +56,8 @@ var api = {
 
   fetchUserInfo(state,access_token) {
 
-    fetch(
-      'https://api.fitbit.com/1/user/-/user.json',
+    return fetch(
+      'https://api.fitbit.com/1/user/-/profile.json',
       {
         method: 'GET',
         headers: {
@@ -51,6 +65,16 @@ var api = {
         }
       }
     ).then((res) => res.json())
+  },
+
+  fetchUserActivityStepsInfo(state, access_token) {
+    var url = 'https://api.fitbit.com/1/user/-/activities/steps/date/today/1d.json';
+    return fetch( url, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${state && access_token}`
+        }
+      }).then((res) => res.json());
   }
 
 };
