@@ -70,7 +70,6 @@ var styles = StyleSheet.create({
     color: 'black'
   },
   Scrollcontainer: {
-    backgroundColor: '#F5F5F0',
     paddingBottom: 10
   }
 });

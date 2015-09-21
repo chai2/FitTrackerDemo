@@ -181,8 +181,13 @@ class Signin extends React.Component{
 
       console.log("Fit Token:" + access_token);
 
+      var today = new Date();
+
+      var date = today.toISOString().substring(0, 10);
+      var url = 'https://api.fitbit.com/1/user/-/activities/date/'+date+'.json'
+
       return fetch(
-        'https://api.fitbit.com/1/user/-/profile.json',
+        url,
         {
           method: 'GET',
           headers: {

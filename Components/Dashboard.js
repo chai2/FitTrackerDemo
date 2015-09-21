@@ -23,7 +23,8 @@ var {
 
 var styles = StyleSheet.create({
   container: {
-    flex: 1
+    flex: 1,
+    marginTop: 60
   },
   scrollView: {
     backgroundColor: '#6A85B1',
@@ -51,10 +52,11 @@ var styles = StyleSheet.create({
     tintColor: '#877324'
 },
 instructions: {
-  marginTop: 65,
-  textAlign: 'center',
+  textAlign: 'left',
   color: '#333333',
   marginBottom: 5,
+  fontSize: 18,
+  marginTop: 5
 },
 rowContainer: {
   padding: 10
@@ -64,7 +66,7 @@ rowTitle: {
   fontSize: 16
 },
 rowContent: {
-  fontSize: 19
+  fontSize: 16
 },
 image: {
   height: 125,
@@ -110,22 +112,42 @@ class Dashboard extends React.Component{
 
     var friendsapidata;
     var badgesapidata;
-    var activityInfo;
+    var activityInfogoals = [];
+    var activityInfosummary = [];
+    var goalsArr = [];
 
     api.fetchFriendsInfo(state,this.props.fitAccessToken)
       .then((res) => this.handleFriendssdata(res))
 
     api.fetchBadgesInfo(state, this.props.fitAccessToken)
-      .then((res) => this.handleBadgesdata(res))
+      .then((jsonRes) => {
+        this.setState ({
+          badgesFitInfo: jsonRes
+        });
+      })
 
     api.fetchUserActivityStepsInfo(state,this.props.fitAccessToken)
       .then((jsonRes) => {
-        console.log("Activity Response: ", jsonRes);
-
         this.setState ({
-          activityInfo: jsonRes
+          activityInfogoals: jsonRes.goals,
+          activityInfosummary: jsonRes.summary
         });
       })
+
+    api.fetchUserInfo(state, this.props.fitAccessToken)
+      .then((jsonRes) => {
+        this.setState ({
+          userFitProfile: jsonRes
+        });
+      })
+
+    api.fetchInvitationInfo(state, this.props.fitAccessToken)
+      .then((jsonRes) => {
+        this.setState ({
+          InvitationsFitInfo: jsonRes
+        });
+      })
+
   }
 
   handleActivitydata(res){
@@ -146,8 +168,18 @@ class Dashboard extends React.Component{
     return badgesapidata;
   }
 
-  getRowTitle(user, item){
+  getRowTitle(arr, item){
+    return this.capitalizeTitle(item);
+  }
+
+  getRowValue(item){
     return item;
+  }
+
+  capitalizeTitle(str) {
+    return str.replace(/\w\S*/g, function(txt) {
+      return txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase();
+    });
   }
 
   render(){
@@ -156,21 +188,37 @@ class Dashboard extends React.Component{
     var fitbitInfo = this.props.userfitdata;
     var userActivitySteps;
 
-    var infoArr = ['strideLengthRunning', 'averageDailySteps'];
+    var goalsArr = this.props.userfitdata.goals;
+    var summaryArr = this.props.userfitdata.summary;
 
-    console.log("hello badges:",this.badgesapidata);
+    var goalsinfoArr = ['caloriesOut', 'steps', 'distance'];
+    var summaryinfoArr = ['caloriesOut', 'steps', 'distances'];
 
-    var list = infoArr.map((item, index) => {
-      if(!fitbitInfo[item]){
+    var goalslist = goalsinfoArr.map((item, index) => {
+      if(!goalsArr[item]){
         return <View key={index}/>
       } else {
         return (
           <View key={index}>
             <View style={styles.rowContainer}>
-              <Text style={styles.rowTitle}> Amigo </Text>
-              <Text style={styles.rowTitle}> {this.state.activityInfo} </Text>
-              // <Text style={styles.rowTitle}>{this.getRowTitle(fitbitInfo, item)}</Text>
-              // <Text style={styles.rowContent}> {fitbitInfo[item]} </Text>
+              <Text style={styles.rowTitle}> {this.getRowTitle(goalsArr, item)} </Text>
+              <Text style={styles.rowContent}> {goalsArr[item]} </Text>
+            </View>
+            <Separator />
+          </View>
+        )
+      }
+    });
+
+    var summarylist = summaryinfoArr.map((item, index) => {
+      if(!summaryArr[item]){
+        return <View key={index}/>
+      } else {
+        return (
+          <View key={index}>
+            <View style={styles.rowContainer}>
+              <Text style={styles.rowTitle}> {this.getRowTitle(summaryArr, item)} </Text>
+              <Text style={styles.rowContent}> {this.getRowValue(summaryArr[item])} </Text>
             </View>
             <Separator />
           </View>
@@ -198,10 +246,13 @@ class Dashboard extends React.Component{
               selectedTab: 'dashboard',
             });
           }}>
-
           <ScrollView style={styles.container}>
-            <Text style={styles.instructions}> Here buggy </Text>
-            <Text style={styles.instructions}> {this.state.activityInfo} </Text>
+            <Text style={styles.instructions}> Your Summary  </Text>
+            <Separator />
+            {summarylist}
+            <Text style={styles.instructions}> Your Goals  </Text>
+            <Separator />
+            {goalslist}
           </ScrollView>
         </Icon.TabBarItem>
 
@@ -215,10 +266,7 @@ class Dashboard extends React.Component{
               selectedTab: 'challenge',
             });
           }}>
-          <View style={styles.container}>
-            <Text> Welcome to Challengers </Text>
-            <Challenges badgeData = { this.props.badgesapidata } />
-          </View>
+          <Challenges badgeData = { [this.state.badgesFitInfo, this.state.InvitationsFitInfo] } />
         </Icon.TabBarItem>
 
         <Icon.TabBarItem
@@ -244,7 +292,7 @@ class Dashboard extends React.Component{
               selectedTab: 'account',
             });
           }}>
-          <Account accountInfo={[this.props.userInfo, this.props.userfitdata]} />
+          <Account accountInfo={[this.props.userInfo, this.state.userFitProfile]} />
         </Icon.TabBarItem>
       </TabBarIOS>
     );

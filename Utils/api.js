@@ -1,7 +1,6 @@
 var api = {
 
   performAuth(username, password){
-
     username = username.toLowerCase().trim();
     var url = `https://api.parse.com/1/login?username=`+username+`&password=`+password;
     return fetch(url, {
@@ -27,10 +26,9 @@ var api = {
   },
 
   fetchFriendsInfo(state,access_token) {
-    console.log("friends"+access_token);
+    var url = 'https://api.fitbit.com/1/user/-/friends.json';
 
-    return fetch(
-      'https://api.fitbit.com/1/user/-/friends.json',
+    return fetch( url,
       {
         method: 'GET',
         headers: {
@@ -41,10 +39,21 @@ var api = {
   },
 
   fetchBadgesInfo(state,access_token) {
-    console.log("friends"+access_token);
+    var url = 'https://api.fitbit.com/1/user/-/badges.json';
 
-    return fetch(
-      'https://api.fitbit.com/1/user/-/friends.json',
+    return fetch( url,
+      {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${state && access_token}`
+        }
+      }
+    ).then((res) => res.json());
+  },
+
+  fetchInvitationInfo(state, access_token) {
+    var url = 'https://api.fitbit.com/1/user/-/friends/invitations.json';
+    return fetch( url,
       {
         method: 'GET',
         headers: {
@@ -56,8 +65,9 @@ var api = {
 
   fetchUserInfo(state,access_token) {
 
-    return fetch(
-      'https://api.fitbit.com/1/user/-/profile.json',
+    var url = 'https://api.fitbit.com/1/user/-/profile.json';
+
+    return fetch( url,
       {
         method: 'GET',
         headers: {
@@ -68,8 +78,11 @@ var api = {
   },
 
   fetchUserActivityStepsInfo(state, access_token) {
-    var url = 'https://api.fitbit.com/1/user/-/activities/steps/date/today/1d.json';
-    return fetch( url, {
+    var today = new Date();
+    var date = today.toISOString().substring(0, 10);
+    var url = 'https://api.fitbit.com/1/user/-/activities/date/'+date+'.json'
+    return fetch( url,
+      {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${state && access_token}`
