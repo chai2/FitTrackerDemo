@@ -83,6 +83,7 @@ class Account extends React.Component{
 
   render() {
     var userInfo = this.props.accountInfo[0];
+
     var infoArr = ['username', 'email'];
 
     var list = infoArr.map((item, index) => {

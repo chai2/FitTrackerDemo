@@ -27,8 +27,6 @@ var api = {
   },
 
   fetchFriendsInfo(state,access_token) {
-    console.log("friends"+access_token);
-
     return fetch(
       'https://api.fitbit.com/1/user/-/friends.json',
       {
@@ -41,7 +39,7 @@ var api = {
   },
 
   fetchBadgesInfo(state,access_token) {
-    console.log("friends"+access_token);
+    console.log("friends: hero"+access_token);
 
     return fetch(
       'https://api.fitbit.com/1/user/-/friends.json',
@@ -51,7 +49,7 @@ var api = {
           'Authorization': `Bearer ${state && access_token}`
         }
       }
-    ).then((res) => res.json());
+    ).then((res) => res.json())
   },
 
   fetchUserInfo(state,access_token) {
@@ -67,14 +65,24 @@ var api = {
     ).then((res) => res.json())
   },
 
-  fetchUserActivityStepsInfo(state, access_token) {
-    var url = 'https://api.fitbit.com/1/user/-/activities/steps/date/today/1d.json';
+  fetchUserActivityInfo(state, date, access_token) {
+    var url = 'https://api.fitbit.com/1/user/-/activities/date/${date}.json';
     return fetch( url, {
         method: 'GET',
         headers: {
           'Authorization': `Bearer ${state && access_token}`
         }
-      }).then((res) => res.json());
+      }).then((res) => res.json())
+  },
+
+  fetchGoalsInfo(state, access_token) {
+    var url = 'https://api.fitbit.com/1/user/-/activities/goals/daily.json';
+    return fetch(url, {
+      method: 'GET',
+      headers: {
+        'Authorization': `Bearer ${state && access_token}`
+      }
+    }).then((res) => res.json())
   }
 
 };

@@ -133,7 +133,8 @@ class Signin extends React.Component{
       email: '',
       isLoading: false,
       error: false,
-      isUser: false
+      isUser: false,
+      access_token: ''
     }
   }
 
@@ -162,6 +163,12 @@ class Signin extends React.Component{
 
   var state = Math.random() + '';
 
+  var today = new Date();
+
+  var fituserInfo;
+
+  today = today.getFullYear()+ '-' + today.getMonth() + '-' + today.getDate();
+
   console.log("login data response", loginData);
 
   if (loginData.error){
@@ -175,29 +182,59 @@ class Signin extends React.Component{
       if (err) {
         console.log(err)
       }
+
       this.setState({
         access_token: access_token
       })
 
-      console.log("Fit Token:" + access_token);
+      console.log("Fitauth response", access_token);
 
-      return fetch(
-        'https://api.fitbit.com/1/user/-/profile.json',
-        {
-          method: 'GET',
-          headers: {
-            'Authorization': `Bearer ${state && access_token}`
-          }
-        }
-      ).then((res) => res.json()).then((res) => {
+    api.fetchUserInfo(state, access_token)
+      .then((res) => {
+        this.setState({
+          fituserInfo: res
+        });
+      })
+
+      console.log("fituserInfo: ", this.state.fituserInfo);
+
+    api.fetchUserActivityInfo(state, today, access_token)
+      .then((res) => {
+        this.setState({
+          fitactivityInfo: res
+        });
+      })
+
+    api.fetchGoalsInfo(state, access_token)
+      .then((res) => {
+        this.setState({
+          fitgoalsInfo: res
+        });
+      })
+
+      // console.log("Fit Token:" + access_token);
+      //
+      // return fetch(
+      //   'https://api.fitbit.com/1/user/-/profile.json',
+      //   {
+      //     method: 'GET',
+      //     headers: {
+      //       'Authorization': `Bearer ${state && access_token}`
+      //     }
+      //   }
+      // ).then((res) => res.json()).then((res) => {
         var Dashboard = require('./Dashboard');
+
+        console.log("this.access_token: ", access_token);
+        // console.log("this.state.access_token: ", this.state.access_token);
         this.props.navigate.push({
           title: 'Dashboard',
           component: Dashboard,
-          passProps: {userInfo: loginData, userfitdata: res, fitAccessToken: access_token }
+          passProps: {userInfo: loginData, userfitdata: this.fituserInfo, fitactivityInfodata: this.fitactivityInfo, fitgoalsInfodata: this.fitgoalsInfo, fitAccessToken: access_token }
         })
-      })
+      // })
     })
+
   }
   }
 

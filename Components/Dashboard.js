@@ -100,49 +100,84 @@ class Dashboard extends React.Component{
 
   constructor(props) {
     super(props);
+    console.log("Props in Dashboard:", this.props);
+
     this.state = {
-      selectedTab: ''
+      selectedTab: '',
+      goalsInfo: '',
+      activityInfo: '',
+      fitgoalsInfo: ''
+    };
+  }
+  //
+  getInitialState(){
+    return {
+      goalsInfo: '',
+      fitgoalsInfo: ''
     };
   }
 
-  componentDidMount(){
+  componentWillMount(){
+
     var state = Math.random() + '';
 
-    var friendsapidata;
-    var badgesapidata;
-    var activityInfo;
+    var friendsapidata = '';
+    var badgesapidata = '';
+    var activityInfo = '';
+    var goalsInfo = '';
+    var fitgoalsInfo = '';
 
-    api.fetchFriendsInfo(state,this.props.fitAccessToken)
-      .then((res) => this.handleFriendssdata(res))
+    // api.fetchFriendsInfo(state,this.props.fitAccessToken)
+    //   .then((res) => this.handleFriendssdata(res))
+    //
+    // api.fetchBadgesInfo(state, this.props.fitAccessToken)
+    //   .then((res) => this.handleBadgesdata(res))
 
-    api.fetchBadgesInfo(state, this.props.fitAccessToken)
-      .then((res) => this.handleBadgesdata(res))
-
-    api.fetchUserActivityStepsInfo(state,this.props.fitAccessToken)
+    api.fetchGoalsInfo(state, this.props.fitAccessToken)
       .then((jsonRes) => {
-        console.log("Activity Response: ", jsonRes);
+        console.log("Goals Response: ", jsonRes);
+        console.log("Types of goals response", typeof jsonRes);
+        this.setState({
+          goalsInfo: jsonRes
+        });
+      })
 
+    console.log("this.props.fitAccessToken", this.props.fitAccessToken);
+
+    api.fetchUserActivityInfo(state, this.props.fitAccessToken)
+      .then((jsonRes) => {
         this.setState ({
           activityInfo: jsonRes
         });
       })
+
+      console.log("whataever", activityInfo);
+
   }
 
+
   handleActivitydata(res){
-    var activityInfo = res;
-    console.log("Activity Info: ", res);
-    return activityInfo;
+
+    console.log("whataever");
+
+    this.setState ({
+      activityInfo: jsonRes
+    });
+
+    // var activityInfo = res;
+    // console.log("Activity Info: ", res);
+    // return activityInfo;
   }
 
   handleFriendssdata(res){
     var friendsInfo = res;
-    console.log("Friends Info: ", res);
+    // console.log("Friends Info: ", res);
     return friendsInfo;
   }
 
   handleBadgesdata(res){
     var badgesapidata = res;
-    console.log("Badges Info: ", res);
+    // console.log("Badges Info: ", res);
     return badgesapidata;
   }
 
@@ -156,28 +191,67 @@ class Dashboard extends React.Component{
     var fitbitInfo = this.props.userfitdata;
     var userActivitySteps;
 
-    var infoArr = ['strideLengthRunning', 'averageDailySteps'];
+    // var infoArr = ['strideLengthRunning', 'averageDailySteps'];
 
-    console.log("hello badges:",this.badgesapidata);
+    var fitgoalsInfo = this.state.goalsInfo.goals;
 
-    var list = infoArr.map((item, index) => {
-      if(!fitbitInfo[item]){
-        return <View key={index}/>
-      } else {
-        return (
-          <View key={index}>
-            <View style={styles.rowContainer}>
-              <Text style={styles.rowTitle}> Amigo </Text>
-              <Text style={styles.rowTitle}> {this.state.activityInfo} </Text>
-              // <Text style={styles.rowTitle}>{this.getRowTitle(fitbitInfo, item)}</Text>
-              // <Text style={styles.rowContent}> {fitbitInfo[item]} </Text>
-            </View>
-            <Separator />
-          </View>
-        )
-      }
+    console.log("fitgoalsInfo:", fitgoalsInfo);
 
-    });
+    // var goals1 = JSON.parse(fitgoalsInfo);
+    //
+    // var goalsArr = ['caloriesOut','distance','steps'];
+    //
+    // var list = goalsArr.map((item), index) => {
+    //
+    // // for(var key in fitgoalsInfo)
+    // // {
+    //   var val = fitgoalsInfo[key];
+    //   return(
+    //     <View key={key}>
+    //       <View style={styles.rowContainer}>
+    //         <Text style={styles.rowTitle}> {fitgoalsInfo[key]} </Text>
+    //         <Text style={styles.rowContent}> {val} </Text>
+    //       </View>
+    //       <Separator />
+    //     </View>
+    //   )
+    //   // console.log("key of: "+key+" Value of: "+val);
+    // // }
+    //
+    // }
+
+    // console.log("fitgoalsInfo[key]:"+fitgoalsInfo["distance"]);
+
+    // console.log("Activity miutes type", fitgoalsInfo);
+    // // console.log("Fitgoals Info Array" + fitgoalsInfo.goals.caloriesOut);
+    // console.log("Fitgoals Info Array type", fitgoalsInfo.goals);
+
+    // console.log("First value:", fitgoalsInfo["caloriesOut"]);
+    // console.log("Second value:", fitgoalsInfo[1]);
+    // console.log("Third value:", fitgoalsInfo[2]);
+
+
+    // var list = goalsArr.map((item, index) => {
+    //
+    //   console.log("Fitgoals: ", fitgoalsInfo);
+    //
+    //   // if(!fitgoalsInfo[item]){
+    //   //   return <View key={index}/>
+    //   // } else {
+    //   //   return (
+    //   //     <View key={index}>
+    //   //       <View style={styles.rowContainer}>
+    //   //         <Text style={styles.rowTitle}> {this.getRowTitle(fitgoalsInfo, item)} </Text>
+    //   //         <Text> Heretoo </Text>
+    //   //         <Text style={styles.rowContent}> {fitgoalsInfo[item]} </Text>
+    //   //         // <Text style={styles.rowTitle}>{this.getRowTitle(fitbitInfo, item)}</Text>
+    //   //         // <Text style={styles.rowContent}> {fitbitInfo[item]} </Text>
+    //   //       </View>
+    //   //       <Separator />
+    //   //     </View>
+    //   //   )
+    //   // }
+    // });
 
     return (
       <TabBarIOS
@@ -199,9 +273,10 @@ class Dashboard extends React.Component{
             });
           }}>
 
-          <ScrollView style={styles.container}>
-            <Text style={styles.instructions}> Here buggy </Text>
-            <Text style={styles.instructions}> {this.state.activityInfo} </Text>
+          <ScrollView style={styles.Scrollcontainer}>
+            <Text> Hello User </Text>
+            <Text> {this.state.fitgoalsInfo} </Text>
+            <Text> Completed Steps: {this.state.activityInfo} </Text>
           </ScrollView>
         </Icon.TabBarItem>
 

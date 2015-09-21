@@ -53,10 +53,13 @@ var Friends = React.createClass({
       }
     ).then((res) => res.json())
     .then((res) => {
-      console.log("here res", res);
+      // console.log("here res", res);
+      console.log("in friends type of response", typeof res);
+
       this.state({
         friendsapidata: res
       })
+
     })
 
   },
