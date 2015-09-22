@@ -24,4 +24,4 @@ Fonts Used:
 
 * Material Icons 
 
-- Used ES6 and ES5 class definitions. 
+Used ES6 and ES5 class definitions. 
