@@ -196,7 +196,7 @@ class Dashboard extends React.Component{
     var summaryArr = this.props.userfitdata.summary;
 
     var goalsinfoArr = ['caloriesOut', 'steps', 'distance'];
-    var summaryinfoArr = ['caloriesOut', 'steps', 'distances'];
+    var summaryinfoArr = ['caloriesOut', 'steps'];
 
     var goalslist = goalsinfoArr.map((item, index) => {
       if(!goalsArr[item]){
@@ -274,7 +274,7 @@ class Dashboard extends React.Component{
         </Icon.TabBarItem>
 
         <Icon.TabBarItem
-          title="Friends"
+          title="Leaderboard"
           iconName="ios-people-outline"
           selectedIconName="ios-people"
           selected={this.state.selectedTab === 'friends'}

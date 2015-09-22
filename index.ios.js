@@ -37,7 +37,7 @@ var FitTracker = React.createClass({
         initialRoute={{
           title: 'Fit Tracker',
           component: Main,
-          passProps: {myProp: 'boom'}
+          passProps: {hideNavBar: this.state.hideNavBar},
         }}/>
     );
   }

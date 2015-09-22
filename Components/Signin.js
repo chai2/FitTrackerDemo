@@ -111,6 +111,10 @@ class Signin extends React.Component{
     }
   }
 
+  hideNavBar(){
+    this.setState({hideNavBar: true});
+  }
+
   handleUsernameChange(e){
     this.setState({
       username: e.nativeEvent.text
@@ -171,6 +175,7 @@ class Signin extends React.Component{
       ).then((res) => res.json()).then((res) => {
         var Dashboard = require('./Dashboard');
         this.props.navigate.push({
+          navigationBarHidden: this.props.hideNavBar,
           title: 'Dashboard',
           component: Dashboard,
           passProps: {userInfo: loginData, userfitdata: res, fitAccessToken: access_token }
