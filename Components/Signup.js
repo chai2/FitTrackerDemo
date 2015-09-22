@@ -3,6 +3,9 @@ var React = require('react-native');
 var Dimensions = require('Dimensions');
 var windowSize = Dimensions.get('window');
 var Login = require('./Signin');
+var api = require('../Utils/api');
+var oauth = require('../Utils/fitbitOauth');
+var config = require('../config');
 
 var {
   AppRegistry,
@@ -41,48 +44,85 @@ class Signup extends React.Component{
     })
   }
 
-  handleResponse(res){
+  handleResponse(response){
+  var signupData = response;
 
-    var dat = res;
+  var state = Math.random() + '';
 
-    var Dashboard = require('./Dashboard');
-
-    if(false){
+  if (signupData.error){
+    this.setState({
+      isLoading: false,
+      error: `Error: ${signupData.error}`
+    })
+  } else {
+    console.log("config.fitbit_app_key", config.fitbit_app_key);
+    oauth.fitbitOauth(config.fitbit_app_key, (err, access_token) => {
+      if (err) {
+        console.log(err)
+      }
       this.setState({
-        error: 'User not found',
-        isLoading: false
+        access_token: access_token
       })
 
-    } else {
-      this.props.navigate.push({
-        title: 'Dashboard',
-        component: Dashboard,
-        passProps: {navigate: this.props.navigate}
-      });
-      this.setState({
-        isLoading: false,
-        error: false,
-        username: ''
-      });
-      }
-    }
+      console.log("Fit Token:" + access_token);
+
+      var today = new Date();
+
+      var date = today.toISOString().substring(0, 10);
+      var url = 'https://api.fitbit.com/1/user/-/activities/date/'+date+'.json'
+
+      return fetch(
+        url,
+        {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${state && access_token}`
+          }
+        }
+      ).then((res) => res.json()).then((res) => {
+        console.log("Response in fit: ", res);
+        var Signin = require('./Signin');
+        this.props.navigate.push({
+          title: 'Sign In',
+          component: Signin,
+        })
+      })
+    })
+  }
+  }
 
   handleSubmit(e){
 
+    var url = `https://api.parse.com/1/users`;
 
-    user.set("username", this.state.username);
-    user.set("password", this.state.password);
-    user.set("email", this.state.email);
-
-    return(
-      user.signUp(null, {
-          success: function(user) {
-        },
-          error: function(user, error) {
-            console.log("Error: " + error.code + " " + error.message);
-          }
+    return fetch(url, {
+      method: 'POST',
+      headers: {
+        'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
+        'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ'
+      },
+      body: JSON.stringify({
+        username: this.state.username,
+        password: this.state.password,
+        email: this.state.email
       })
-    ).then((jsonRes) => this.handleResponse(jsonRes));
+    }).then((res) => res.json())
+      .then((res) => this.handleResponse(res))
+      .catch((err) => {
+        this.setState({
+          isLoading: false,
+          error: `There was an error: ${err}`
+        })
+      })
+
+    // api.performSignup(this.state.username, this.state.password, this.state.email)
+    // .then((jsonRes) => this.handleResponse(jsonRes))
+    // .catch((err) => {
+    //   this.setState({
+    //     isLoading: false,
+    //     error: `There was an error: ${err}`
+    //   })
+    // })
   }
 
   navigatetoLogin(e){

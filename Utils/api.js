@@ -3,8 +3,28 @@ var api = {
   performAuth(username, password){
     username = username.toLowerCase().trim();
     var url = `https://api.parse.com/1/login?username=`+username+`&password=`+password;
+    console.log("URL in Login: ", url);
     return fetch(url, {
       method: 'get',
+      headers: {
+      'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
+      'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ',
+      'X-Parse-Revocable-Session': '1'
+      }
+    }).then((res) => res.json());
+  },
+
+  performSignup(username, password, email){
+
+    console.log("username"+username+"password"+password+"email"+email);
+
+    username = username.toLowerCase().trim();
+    var url = `https://api.parse.com/1/users?username=`+username+`&password=`+password+`&email=`+email;
+
+    console.log("URL: ", url);
+
+    return fetch(url, {
+      method: 'POST',
       headers: {
       'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
       'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ',
