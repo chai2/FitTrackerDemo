@@ -42,6 +42,11 @@ var styles = StyleSheet.create({
     textAlign: 'center',
     color: '#333333',
     marginBottom: 5,
+  },
+  badgedescription: {
+    alignSelf: 'auto',
+    fontSize: 16,
+    color: 'black'
   }
 });
 

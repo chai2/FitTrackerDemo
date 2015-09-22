@@ -117,7 +117,11 @@ class Dashboard extends React.Component{
     var goalsArr = [];
 
     api.fetchFriendsInfo(state,this.props.fitAccessToken)
-      .then((res) => this.handleFriendssdata(res))
+      .then((jsonRes) => {
+        this.setState ({
+          friendsInfo: jsonRes
+        })
+      })
 
     api.fetchBadgesInfo(state, this.props.fitAccessToken)
       .then((jsonRes) => {
@@ -279,7 +283,7 @@ class Dashboard extends React.Component{
               selectedTab: 'friends',
             });
           }}>
-          <Friends friendsData = { [this.props.fitAccessToken, this.props.friendsapidata] } />
+          <Friends friendsData = { [this.state.userFitProfile, this.state.badgesFitInfo, this.state.friendsInfo] } />
         </Icon.TabBarItem>
 
         <Icon.TabBarItem
