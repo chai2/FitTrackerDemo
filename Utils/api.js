@@ -7,8 +7,8 @@ var api = {
     return fetch(url, {
       method: 'get',
       headers: {
-      'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
-      'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ',
+      'X-Parse-Application-Id': PARSE_APP_ID,
+      'X-Parse-REST-API-Key': PARSE_REST_KEY,
       'X-Parse-Revocable-Session': '1'
       }
     }).then((res) => res.json());
@@ -26,8 +26,8 @@ var api = {
     return fetch(url, {
       method: 'POST',
       headers: {
-      'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
-      'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ',
+      'X-Parse-Application-Id': PARSE_APP_ID,
+      'X-Parse-REST-API-Key': PARSE_REST_KEY,
       'X-Parse-Revocable-Session': '1'
       }
     }).then((res) => res.json());
@@ -38,8 +38,8 @@ var api = {
     return fetch(url, {
       method: 'get',
       headers: {
-      'X-Parse-Application-Id': 'Wyf2z9CIprx4iRDm7GCnCXbH7hlWkCr44aLkP7De',
-      'X-Parse-REST-API-Key': 'lYO6X3o9inU3TmmyHCtzDE8SzP5JP89S5MsGZqJZ',
+      'X-Parse-Application-Id': PARSE_APP_ID,
+      'X-Parse-REST-API-Key': PARSE_REST_KEY,
       'X-Parse-Session-Token': `${access_token}`
       }
     })
