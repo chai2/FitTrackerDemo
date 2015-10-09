@@ -26,7 +26,7 @@ var oauth = {
     LinkingIOS.openURL([
       'https://www.fitbit.com/oauth2/authorize',
       '?response_type=token',
-      '&client_id=' + '229VKW',
+      '&client_id=' + FIT_BIT_ID,
       '&redirect_uri=leaderboard://authy',
       `&state=${state}`,
       '&scope=profile social weight activity location heartrate activity settings sleep',
